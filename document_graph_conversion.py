@@ -6,35 +6,21 @@ import penman
 import pandas as pd
 import networkx as nx
 import ray
+from math import ceil
+
+BATCH_SIZE = 20                # Количество предложений в одном батче
+NUM_SENTENCE_PROCESSORS = 8    # Количество акторов для обработки предложений
 
 def draw_graph(graph, graph_name):
     dot_graph = nx.nx_agraph.to_agraph(graph)
     dot_graph.layout(prog='dot')
-    new_graph_name = str(graph_name) + '.png'
+    new_graph_name = f"{graph_name}.png"
     dot_graph.draw(new_graph_name)
     return new_graph_name
 
-def save_graphs(graphs, graphs_dataset_file_name, mode):
-    for graph_name, graph in graphs.items():
-        nx.write_gml(graph, graph_name + ".gml")
-        path = graphs_dataset_file_name + '/' + mode + '/' + graph_name + ".gml"
-        shutil.move(graph_name + ".gml", path)
-
-def merge_graphs(sent_graphs):
-    merged_graph = nx.MultiDiGraph()
-    for graph in sent_graphs.values():
-        for edge in graph.edges(data=True):
-            if edge not in merged_graph.edges(data=True):
-                merged_graph.add_edge(edge[0], edge[1], label=edge[2]['label'])
-    if not list(nx.isolates(merged_graph)):
-        return merged_graph
-    else:
-        print("Merged graph isn't connected. Problematic.")
-        return 0
-
 def lemmatize(doc, lemma_dict):
     for token in doc:
-        lower_tok = str(token).lower()
+        lower_tok = token.text.lower()
         if lower_tok not in lemma_dict:
             lemma_dict[lower_tok] = token.lemma_.lower()
     return lemma_dict
@@ -62,7 +48,7 @@ def modify_graph(graph):
     # Сортируем ребра так, чтобы сначала обрабатывались :instance
     graph_edges = sorted(graph.edges(data=True), key=lambda e: e[2]['label'] != ':instance')
     for node_1, node_2, data in graph_edges:
-        if len(data['label']) != 0:
+        if data['label']:
             if data['label'] == ':instance':
                 if graph.out_degree(node_2) == 0:
                     if node_1 not in instance_dict:
@@ -92,38 +78,73 @@ def modify_graph(graph):
         print("Modified graph isn't connected. Problematic.")
         return 0
 
-# Для предложений теперь не запрашиваем GPU, чтобы не блокировать ресурсы
 @ray.remote
-def process_sentence(sentence_index, amr_graph_str, lemma_dict):
-    try:
-        penman_graph = penman.decode(amr_graph_str)
-    except Exception as e:
-        print(f"Problem with decoding the AMR graph for sentence {sentence_index}: {e}")
-        return (sentence_index, None)
+class SentenceProcessor:
+    def __init__(self):
+        # Если понадобится, можно инициализировать ресурсы (например, модель) один раз
+        pass
 
-    temp_graph = nx.MultiDiGraph()
-    for triple in penman_graph.triples:
-        try:
-            temp_graph.add_edge(triple[0], triple[2], label=triple[1])
-        except Exception as e:
-            print(f"Problem with adding an edge for sentence {sentence_index}: {e}")
-            continue
+    def process_batch(self, batch):
+        """
+        batch: список кортежей (sentence_index, amr_graph_str, lemma_dict)
+        Возвращает список кортежей (sentence_index, refined_graph)
+        """
+        results = []
+        for sentence_index, amr_graph_str, lemma_dict in batch:
+            try:
+                penman_graph = penman.decode(amr_graph_str)
+            except Exception as e:
+                print(f"Decoding error for sentence {sentence_index}: {e}")
+                results.append((sentence_index, None))
+                continue
 
-    modified_graph = modify_graph(temp_graph)
-    if modified_graph == 0:
-        print(f"Problem with modifying the AMR graph for sentence {sentence_index}")
-        return (sentence_index, None)
+            temp_graph = nx.MultiDiGraph()
+            for triple in penman_graph.triples:
+                try:
+                    temp_graph.add_edge(triple[0], triple[2], label=triple[1])
+                except Exception as e:
+                    print(f"Edge adding error for sentence {sentence_index}: {e}")
+                    continue
 
-    refined_graph = refine_graph(modified_graph, lemma_dict)
-    return (sentence_index, refined_graph)
+            modified_graph = modify_graph(temp_graph)
+            if modified_graph == 0:
+                print(f"Modification error for sentence {sentence_index}")
+                results.append((sentence_index, None))
+                continue
 
-# Для документов оставляем запрос на 1 GPU, если требуется
+            refined_graph = refine_graph(modified_graph, lemma_dict)
+            results.append((sentence_index, refined_graph))
+        return results
+
+@ray.remote
+def remote_save_graphs(graphs, graphs_dataset_file_name, mode):
+    """
+    Сохраняет графы асинхронно.
+    """
+    for graph_name, graph in graphs.items():
+        nx.write_gml(graph, f"{graph_name}.gml")
+        path = f"{graphs_dataset_file_name}/{mode}/{graph_name}.gml"
+        shutil.move(f"{graph_name}.gml", path)
+    return True
+
+@ray.remote
+def remote_merge_graphs(sent_graphs):
+    merged_graph = nx.MultiDiGraph()
+    for graph in sent_graphs.values():
+        for edge in graph.edges(data=True):
+            if edge not in merged_graph.edges(data=True):
+                merged_graph.add_edge(edge[0], edge[1], label=edge[2]['label'])
+    if not list(nx.isolates(merged_graph)):
+        return merged_graph
+    else:
+        print("Merged graph isn't connected. Problematic.")
+        return 0
+
 @ray.remote(num_gpus=1)
-def process_document(document_index, document_text, document_frame, graphs_dataset_file_name, mode):
-    # Инициализация amrlib и spaCy в воркере
+def process_document(document_index, document_text, document_frame, graphs_dataset_file_name, mode, sentence_processors):
+    # Инициализируем amrlib и spaCy (GPU используется для документа)
     amrlib.setup_spacy_extension()
     nlp = spacy.load('en_core_web_sm')
-
     doc = nlp(document_text)
     lemma_dict = {}
     lemma_dict = lemmatize(doc, lemma_dict)
@@ -133,25 +154,46 @@ def process_document(document_index, document_text, document_frame, graphs_datas
         print(f"Error converting document {document_index} to AMR: {e}")
         return document_index
 
-    sentence_tasks = []
-    # Запускаем параллельную обработку каждого предложения
+    # Формирование батчей предложений
+    sentence_batches = []
+    current_batch = []
     for idx, amr_graph_str in enumerate(amr_graphs):
         sentence_index = document_frame.iloc[idx]['sentence_index']
-        sentence_tasks.append(process_sentence.remote(sentence_index, amr_graph_str, lemma_dict))
-    sentence_results = ray.get(sentence_tasks)
+        current_batch.append((sentence_index, amr_graph_str, lemma_dict))
+        if len(current_batch) == BATCH_SIZE:
+            sentence_batches.append(current_batch)
+            current_batch = []
+    if current_batch:
+        sentence_batches.append(current_batch)
+
+    # Распределяем батчи между актерами SentenceProcessor
+    batch_tasks = []
+    num_processors = len(sentence_processors)
+    for i, batch in enumerate(sentence_batches):
+        actor = sentence_processors[i % num_processors]
+        batch_tasks.append(actor.process_batch.remote(batch))
+    batch_results = ray.get(batch_tasks)
+
     sent_graphs = {}
-    for sentence_index, refined_graph in sentence_results:
-        if refined_graph is not None:
-            sent_graphs[str(sentence_index)] = refined_graph
-            if mode in ['all', 'sentences']:
-                save_graphs({str(sentence_index): refined_graph}, graphs_dataset_file_name, mode='sentences')
+    save_tasks = []
+    for batch in batch_results:
+        for sentence_index, refined_graph in batch:
+            if refined_graph is not None:
+                sent_graphs[str(sentence_index)] = refined_graph
+                if mode in ['all', 'sentences']:
+                    # Асинхронное сохранение графа предложения
+                    save_tasks.append(
+                        remote_save_graphs.remote({str(sentence_index): refined_graph}, graphs_dataset_file_name, 'sentences')
+                    )
+    # Ожидаем завершения сохранения предложений
+    ray.wait(save_tasks, num_returns=len(save_tasks))
 
     if mode in ['all', 'documents'] and sent_graphs:
-        merged_graph = merge_graphs(sent_graphs)
+        merged_graph = ray.get(remote_merge_graphs.remote(sent_graphs))
         if merged_graph != 0:
             doc_graph = {str(document_index): merged_graph}
-            save_graphs(doc_graph, graphs_dataset_file_name, mode='documents')
-
+            # Асинхронное сохранение объединённого графа документа
+            ray.wait([remote_save_graphs.remote(doc_graph, graphs_dataset_file_name, 'documents')])
     print(f"Document {document_index} processed.")
     return document_index
 
@@ -161,9 +203,15 @@ def convert_documents(dataset, preprocessed_documents_csv_file_name, preprocesse
     sent_df = pd.read_csv(preprocessed_sentences_csv_file_name)
     documents = sent_df.groupby('document_index', sort=False)
 
+    # Инициализируем пул акторов для обработки предложений
+    sentence_processors = [SentenceProcessor.remote() for _ in range(NUM_SENTENCE_PROCESSORS)]
+
     doc_tasks = []
     for document_index, document_frame in documents:
         document_text = doc_df.loc[doc_df['document_index'] == document_index]['document'].values[0]
-        doc_tasks.append(process_document.remote(document_index, document_text, document_frame, graphs_dataset_file_name, mode))
+        doc_tasks.append(
+            process_document.remote(document_index, document_text, document_frame,
+                                      graphs_dataset_file_name, mode, sentence_processors)
+        )
     results = ray.get(doc_tasks)
     print(f"Processing finished for documents: {results}")
