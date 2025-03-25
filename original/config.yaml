@@ -1,0 +1,11 @@
+ten_newsgroups_classes: ['business', 'entertainment', 'food', 'graphics', 'historical', 'medical', 'politics', 'space', 'sport', 'technologie']
+
+ten_newsgroups_raw_documents_dataset_file_name: 'datasets/ten_newsgroups_raw_documents_dataset'
+
+ten_newsgroups_raw_documents_csv_file_name: 'datasets/ten_newsgroups_raw_documents_dataset/ten_newsgroups_raw_documents.csv'
+
+ten_newsgroups_preprocessed_documents_csv_file_name: 'datasets/ten_newsgroups_raw_documents_dataset/ten_newsgroups_preprocessed_documents.csv'
+
+ten_newsgroups_preprocessed_sentences_csv_file_name: 'datasets/ten_newsgroups_raw_documents_dataset/ten_newsgroups_preprocessed_sentences.csv'
+
+ten_newsgroups_graphs_dataset_file_name: 'datasets/ten_newsgroups_graphs_dataset'

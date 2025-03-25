@@ -1,0 +1,48 @@
+graph [
+  directed 1
+  multigraph 1
+  node [
+    id 0
+    label "amr-unknown"
+  ]
+  node [
+    id 1
+    label "product"
+  ]
+  node [
+    id 2
+    label "name"
+  ]
+  node [
+    id 3
+    label "marine"
+  ]
+  node [
+    id 4
+    label "chronometer"
+  ]
+  edge [
+    source 0
+    target 1
+    key 0
+    label ":topic"
+  ]
+  edge [
+    source 1
+    target 2
+    key 0
+    label ":name"
+  ]
+  edge [
+    source 2
+    target 3
+    key 0
+    label ":op1"
+  ]
+  edge [
+    source 2
+    target 4
+    key 0
+    label ":op2"
+  ]
+]
