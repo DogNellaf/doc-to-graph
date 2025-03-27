@@ -795,7 +795,7 @@ graph [
   ]
   node [
     id 198
-    label "honours"
+    label "honour"
   ]
   edge [
     source 0

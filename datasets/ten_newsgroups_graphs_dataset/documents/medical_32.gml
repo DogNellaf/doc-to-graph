@@ -11,7 +11,7 @@ graph [
   ]
   node [
     id 2
-    label "head"
+    label "heading"
   ]
   node [
     id 3

@@ -207,7 +207,7 @@ graph [
   ]
   node [
     id 51
-    label "logistic"
+    label "logistics"
   ]
   node [
     id 52

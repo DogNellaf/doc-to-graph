@@ -11,7 +11,7 @@ graph [
   ]
   node [
     id 2
-    label "athletics"
+    label "athletic"
   ]
   node [
     id 3

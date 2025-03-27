@@ -1227,7 +1227,7 @@ graph [
   ]
   node [
     id 306
-    label "can"
+    label "ca"
   ]
   node [
     id 307
@@ -1279,7 +1279,7 @@ graph [
   ]
   node [
     id 319
-    label "build"
+    label "building"
   ]
   node [
     id 320
@@ -1555,7 +1555,7 @@ graph [
   ]
   node [
     id 388
-    label "people"
+    label "peoples"
   ]
   node [
     id 389

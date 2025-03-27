@@ -311,7 +311,7 @@ graph [
   ]
   node [
     id 77
-    label "head"
+    label "heading"
   ]
   node [
     id 78

@@ -251,7 +251,7 @@ graph [
   ]
   node [
     id 62
-    label "ethic"
+    label "ethics"
   ]
   node [
     id 63

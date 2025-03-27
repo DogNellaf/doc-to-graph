@@ -119,7 +119,7 @@ graph [
   ]
   node [
     id 29
-    label "data"
+    label "datum"
   ]
   node [
     id 30

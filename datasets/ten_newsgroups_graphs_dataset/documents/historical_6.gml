@@ -571,50 +571,46 @@ graph [
   ]
   node [
     id 142
-    label "time"
-  ]
-  node [
-    id 143
     label "some"
   ]
   node [
-    id 144
+    id 143
     label "100"
   ]
   node [
-    id 145
+    id 144
     label "k-pg"
   ]
   node [
-    id 146
+    id 145
     label "700000"
   ]
   node [
-    id 147
+    id 146
     label "steve"
   ]
   node [
-    id 148
+    id 147
     label "brusatte"
   ]
   node [
-    id 149
+    id 148
     label "edinburgh"
   ]
   node [
-    id 150
+    id 149
     label "involve-01"
   ]
   node [
-    id 151
+    id 150
     label "-"
   ]
   node [
-    id 152
+    id 151
     label "dream-01"
   ]
   node [
-    id 153
+    id 152
     label "all"
   ]
   edge [
@@ -835,7 +831,7 @@ graph [
   ]
   edge [
     source 8
-    target 143
+    target 142
     key 0
     label ":mod"
   ]
@@ -1051,19 +1047,19 @@ graph [
   ]
   edge [
     source 12
-    target 145
+    target 144
     key 0
     label ":op2"
   ]
   edge [
     source 12
-    target 147
+    target 146
     key 0
     label ":op1"
   ]
   edge [
     source 12
-    target 148
+    target 147
     key 0
     label ":op2"
   ]
@@ -1075,7 +1071,7 @@ graph [
   ]
   edge [
     source 12
-    target 149
+    target 148
     key 0
     label ":op3"
   ]
@@ -1117,7 +1113,7 @@ graph [
   ]
   edge [
     source 18
-    target 146
+    target 145
     key 0
     label ":quant"
   ]
@@ -1584,6 +1580,12 @@ graph [
     label ":mod"
   ]
   edge [
+    source 78
+    target 143
+    key 0
+    label ":quant"
+  ]
+  edge [
     source 80
     target 83
     key 0
@@ -1975,7 +1977,7 @@ graph [
   ]
   edge [
     source 129
-    target 142
+    target 78
     key 0
     label ":ARG3"
   ]
@@ -2046,44 +2048,38 @@ graph [
     label ":mod"
   ]
   edge [
-    source 142
-    target 144
-    key 0
-    label ":quant"
-  ]
-  edge [
-    source 150
+    source 149
     target 36
     key 0
     label ":ARG1"
   ]
   edge [
-    source 150
-    target 151
+    source 149
+    target 150
     key 0
     label ":polarity"
   ]
   edge [
-    source 150
+    source 149
     target 37
     key 0
     label ":ARG2"
   ]
   edge [
-    source 152
+    source 151
     target 39
     key 0
     label ":ARG1"
   ]
   edge [
-    source 152
+    source 151
     target 52
     key 0
     label ":ARG0"
   ]
   edge [
-    source 152
-    target 153
+    source 151
+    target 152
     key 0
     label ":mod"
   ]

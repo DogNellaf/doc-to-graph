@@ -511,7 +511,7 @@ graph [
   ]
   node [
     id 127
-    label "medium"
+    label "media"
   ]
   node [
     id 128

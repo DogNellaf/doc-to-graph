@@ -407,7 +407,7 @@ graph [
   ]
   node [
     id 101
-    label "headquarters"
+    label "headquarter"
   ]
   node [
     id 102

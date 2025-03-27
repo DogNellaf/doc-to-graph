@@ -215,7 +215,7 @@ graph [
   ]
   node [
     id 53
-    label "further"
+    label "far"
   ]
   node [
     id 54
@@ -603,7 +603,7 @@ graph [
   ]
   node [
     id 150
-    label "alter"
+    label "altered"
   ]
   node [
     id 151

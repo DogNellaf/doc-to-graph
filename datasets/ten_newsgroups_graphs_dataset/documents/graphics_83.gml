@@ -103,7 +103,7 @@ graph [
   ]
   node [
     id 25
-    label "graphic"
+    label "graphics"
   ]
   node [
     id 26
@@ -247,63 +247,63 @@ graph [
   ]
   node [
     id 61
-    label "process-01"
+    label "graphic"
   ]
   node [
     id 62
-    label "have-org-role-91"
+    label "process-01"
   ]
   node [
     id 63
-    label "image"
+    label "have-org-role-91"
   ]
   node [
     id 64
-    label "value-interval"
+    label "image"
   ]
   node [
     id 65
-    label "3"
+    label "value-interval"
   ]
   node [
     id 66
-    label "1987"
+    label "3"
   ]
   node [
     id 67
-    label "1"
+    label "1987"
   ]
   node [
     id 68
-    label "4"
+    label "1"
   ]
   node [
     id 69
-    label "graemex."
+    label "4"
   ]
   node [
     id 70
-    label "double-step"
+    label "graemex."
   ]
   node [
     id 71
-    label "generation"
+    label "double-step"
   ]
   node [
     id 72
-    label "of"
+    label "generation"
   ]
   node [
     id 73
-    label "ellipses"
+    label "of"
   ]
   node [
     id 74
-    label "gemeieee"
+    label "ellipses"
   ]
   node [
     id 75
-    label "graphics"
+    label "gemeieee"
   ]
   node [
     id 76
@@ -545,13 +545,13 @@ graph [
   ]
   edge [
     source 3
-    target 65
+    target 66
     key 0
     label ":month"
   ]
   edge [
     source 3
-    target 66
+    target 67
     key 0
     label ":year"
   ]
@@ -695,12 +695,6 @@ graph [
   ]
   edge [
     source 4
-    target 69
-    key 0
-    label ":op1"
-  ]
-  edge [
-    source 4
     target 70
     key 0
     label ":op1"
@@ -709,23 +703,29 @@ graph [
     source 4
     target 71
     key 0
-    label ":op2"
+    label ":op1"
   ]
   edge [
     source 4
     target 72
     key 0
-    label ":op3"
+    label ":op2"
   ]
   edge [
     source 4
     target 73
     key 0
-    label ":op4"
+    label ":op3"
   ]
   edge [
     source 4
     target 74
+    key 0
+    label ":op4"
+  ]
+  edge [
+    source 4
+    target 75
     key 0
     label ":op1"
   ]
@@ -743,13 +743,13 @@ graph [
   ]
   edge [
     source 4
-    target 75
+    target 25
     key 0
     label ":op3"
   ]
   edge [
     source 4
-    target 75
+    target 25
     key 1
     label ":op2"
   ]
@@ -929,7 +929,7 @@ graph [
   ]
   edge [
     source 27
-    target 64
+    target 65
     key 0
     label ":ARG7"
   ]
@@ -947,7 +947,7 @@ graph [
   ]
   edge [
     source 28
-    target 64
+    target 65
     key 0
     label ":ARG7"
   ]
@@ -1157,13 +1157,13 @@ graph [
   ]
   edge [
     source 60
-    target 25
+    target 61
     key 0
     label ":op1"
   ]
   edge [
     source 60
-    target 61
+    target 62
     key 0
     label ":op2"
   ]
@@ -1181,36 +1181,42 @@ graph [
   ]
   edge [
     source 61
-    target 63
+    target 26
+    key 0
+    label ":mod"
+  ]
+  edge [
+    source 62
+    target 64
     key 0
     label ":ARG1"
   ]
   edge [
-    source 62
+    source 63
     target 60
     key 0
     label ":ARG0"
   ]
   edge [
-    source 62
+    source 63
     target 60
     key 1
     label ":ARG1"
   ]
   edge [
-    source 64
-    target 67
+    source 65
+    target 68
     key 0
     label ":op1"
   ]
   edge [
-    source 64
-    target 68
+    source 65
+    target 69
     key 0
     label ":op2"
   ]
   edge [
-    source 64
+    source 65
     target 78
     key 0
     label ":op1"
@@ -1283,7 +1289,7 @@ graph [
   ]
   edge [
     source 84
-    target 65
+    target 66
     key 0
     label ":quant"
   ]

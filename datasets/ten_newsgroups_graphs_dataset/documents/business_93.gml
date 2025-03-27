@@ -163,7 +163,7 @@ graph [
   ]
   node [
     id 40
-    label "data"
+    label "datum"
   ]
   node [
     id 41

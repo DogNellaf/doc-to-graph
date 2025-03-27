@@ -231,7 +231,7 @@ graph [
   ]
   node [
     id 57
-    label "stranger"
+    label "strange"
   ]
   node [
     id 58

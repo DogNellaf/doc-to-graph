@@ -207,7 +207,7 @@ graph [
   ]
   node [
     id 51
-    label "athletics"
+    label "athletic"
   ]
   node [
     id 52

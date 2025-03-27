@@ -211,7 +211,7 @@ graph [
   ]
   node [
     id 52
-    label "publications"
+    label "publication"
   ]
   node [
     id 53

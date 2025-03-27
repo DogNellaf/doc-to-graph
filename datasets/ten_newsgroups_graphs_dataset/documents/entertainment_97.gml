@@ -63,7 +63,7 @@ graph [
   ]
   node [
     id 15
-    label "build"
+    label "building"
   ]
   node [
     id 16

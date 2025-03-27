@@ -607,7 +607,7 @@ graph [
   ]
   node [
     id 151
-    label "further"
+    label "far"
   ]
   node [
     id 152

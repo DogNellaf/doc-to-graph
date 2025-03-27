@@ -1275,7 +1275,7 @@ graph [
   ]
   node [
     id 318
-    label "set"
+    label "setting"
   ]
   node [
     id 319
@@ -2779,7 +2779,7 @@ graph [
   ]
   node [
     id 694
-    label "pediatric"
+    label "pediatrics"
   ]
   node [
     id 695

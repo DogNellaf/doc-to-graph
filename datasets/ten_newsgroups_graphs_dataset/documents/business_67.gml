@@ -99,7 +99,7 @@ graph [
   ]
   node [
     id 24
-    label "statistic"
+    label "statistics"
   ]
   node [
     id 25

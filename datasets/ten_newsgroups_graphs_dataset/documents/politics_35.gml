@@ -255,7 +255,7 @@ graph [
   ]
   node [
     id 63
-    label "politics"
+    label "politic"
   ]
   node [
     id 64
@@ -579,7 +579,7 @@ graph [
   ]
   node [
     id 144
-    label "further"
+    label "far"
   ]
   node [
     id 145

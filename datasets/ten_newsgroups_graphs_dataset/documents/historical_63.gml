@@ -1683,7 +1683,7 @@ graph [
   ]
   node [
     id 420
-    label "harki"
+    label "harkis"
   ]
   node [
     id 421

@@ -175,7 +175,7 @@ graph [
   ]
   node [
     id 43
-    label "further"
+    label "far"
   ]
   node [
     id 44
@@ -2563,50 +2563,46 @@ graph [
   ]
   node [
     id 640
-    label "far"
-  ]
-  node [
-    id 641
     label "german"
   ]
   node [
-    id 642
+    id 641
     label "navy"
   ]
   node [
-    id 643
+    id 642
     label "war-01"
   ]
   node [
-    id 644
+    id 643
     label "1939"
   ]
   node [
-    id 645
+    id 644
     label "position"
   ]
   node [
-    id 646
+    id 645
     label "ocean"
   ]
   node [
-    id 647
+    id 646
     label "imperative"
   ]
   node [
-    id 648
+    id 647
     label "you"
   ]
   node [
-    id 649
+    id 648
     label "below"
   ]
   node [
-    id 650
+    id 649
     label "extend-01"
   ]
   node [
-    id 651
+    id 650
     label "hostility"
   ]
   edge [
@@ -2893,7 +2889,7 @@ graph [
   ]
   edge [
     source 4
-    target 644
+    target 643
     key 0
     label ":year"
   ]
@@ -3397,6 +3393,12 @@ graph [
   ]
   edge [
     source 5
+    target 43
+    key 0
+    label ":op1"
+  ]
+  edge [
+    source 5
     target 640
     key 0
     label ":op1"
@@ -3404,12 +3406,6 @@ graph [
   edge [
     source 5
     target 641
-    key 0
-    label ":op1"
-  ]
-  edge [
-    source 5
-    target 642
     key 0
     label ":op2"
   ]
@@ -5995,7 +5991,7 @@ graph [
   ]
   edge [
     source 104
-    target 650
+    target 649
     key 0
     label ":ARG0"
   ]
@@ -6301,7 +6297,7 @@ graph [
   ]
   edge [
     source 130
-    target 645
+    target 644
     key 0
     label ":ARG1"
   ]
@@ -9247,7 +9243,7 @@ graph [
   ]
   edge [
     source 401
-    target 643
+    target 642
     key 0
     label ":purpose"
   ]
@@ -9919,19 +9915,19 @@ graph [
   ]
   edge [
     source 486
-    target 647
+    target 646
     key 0
     label ":mode"
   ]
   edge [
     source 486
-    target 648
+    target 647
     key 0
     label ":ARG0"
   ]
   edge [
     source 486
-    target 649
+    target 648
     key 0
     label ":location"
   ]
@@ -11082,79 +11078,79 @@ graph [
     label ":ARG1"
   ]
   edge [
-    source 643
+    source 642
     target 1
     key 0
     label ":ARG0"
   ]
   edge [
-    source 643
+    source 642
     target 1
     key 1
     label ":ARG1"
   ]
   edge [
-    source 643
+    source 642
     target 4
     key 0
     label ":time"
   ]
   edge [
-    source 643
+    source 642
     target 110
     key 0
     label ":time"
   ]
   edge [
-    source 645
+    source 644
     target 18
     key 0
     label ":poss"
   ]
   edge [
-    source 645
+    source 644
     target 18
     key 1
     label ":location"
   ]
   edge [
-    source 645
-    target 646
+    source 644
+    target 645
     key 0
     label ":op1"
   ]
   edge [
-    source 645
+    source 644
     target 342
     key 0
     label ":op2"
   ]
   edge [
-    source 645
+    source 644
     target 342
     key 1
     label ":op3"
   ]
   edge [
-    source 649
+    source 648
     target 283
     key 0
     label ":op1"
   ]
   edge [
-    source 649
+    source 648
     target 519
     key 0
     label ":time"
   ]
   edge [
-    source 650
-    target 651
+    source 649
+    target 650
     key 0
     label ":ARG1"
   ]
   edge [
-    source 650
+    source 649
     target 382
     key 0
     label ":mod"

@@ -1,3 +1,4 @@
+import os
 import logging
 import datetime as dt
 from pathlib import Path
@@ -22,8 +23,8 @@ logging.basicConfig(
 ray.init(
     ignore_reinit_error=True,
     logging_level=logging.DEBUG,
-    num_cpus=10,
-    num_gpus=1 if torch.cuda.is_available() else 0
+    num_cpus=os.cpu_count() - 1,
+    num_gpus=torch.cuda.device_count() if torch.cuda.is_available() else 0
 )
 torch.backends.cudnn.benchmark = True
 
@@ -64,7 +65,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--operation',
         type=str,
-        default='document_graph_conversion',
+        default='document_preprocessing',
         choices=[
             'file_renaming',
             'indexation',
@@ -98,8 +99,8 @@ if __name__ == '__main__':
     classes = config[dataset + '_classes']
     raw_dataset_filename = config[dataset + '_raw_documents_dataset_file_name']
     raw_csv_filename = config[dataset + '_raw_documents_csv_file_name']
-    preprocessed_documents_filename = config[dataset + '_preprocessed_documents_csv_file_name']
-    preprocessed_sentences_filename = config[dataset + '_preprocessed_sentences_csv_file_name']
+    preprocessed_documents_filename = config[dataset + '_preprocessed_documents_csv_file_name'] # TODO: delete test data
+    preprocessed_sentences_filename = config[dataset + '_preprocessed_sentences_csv_file_name']# TODO: delete test data
     graphs_filename = config[dataset + '_graphs_dataset_file_name']
 
     if operation == 'file_renaming':

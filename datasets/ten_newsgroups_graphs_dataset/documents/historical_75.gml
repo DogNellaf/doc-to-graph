@@ -879,7 +879,7 @@ graph [
   ]
   node [
     id 219
-    label "further"
+    label "far"
   ]
   node [
     id 220

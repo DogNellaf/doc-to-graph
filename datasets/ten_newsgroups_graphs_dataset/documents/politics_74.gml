@@ -195,7 +195,7 @@ graph [
   ]
   node [
     id 48
-    label "politics"
+    label "politic"
   ]
   node [
     id 49

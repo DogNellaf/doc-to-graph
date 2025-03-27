@@ -399,7 +399,7 @@ graph [
   ]
   node [
     id 99
-    label "politics"
+    label "politic"
   ]
   node [
     id 100
@@ -791,7 +791,7 @@ graph [
   ]
   node [
     id 197
-    label "be"
+    label "being"
   ]
   node [
     id 198
@@ -1003,7 +1003,7 @@ graph [
   ]
   node [
     id 250
-    label "build"
+    label "building"
   ]
   node [
     id 251

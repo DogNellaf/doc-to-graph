@@ -491,7 +491,7 @@ graph [
   ]
   node [
     id 122
-    label "cinema"
+    label "cinemas"
   ]
   node [
     id 123

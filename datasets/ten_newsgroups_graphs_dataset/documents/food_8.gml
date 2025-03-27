@@ -99,7 +99,7 @@ graph [
   ]
   node [
     id 24
-    label "baking"
+    label "bake"
   ]
   node [
     id 25

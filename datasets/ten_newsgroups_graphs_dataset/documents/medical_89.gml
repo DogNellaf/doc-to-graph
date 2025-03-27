@@ -847,7 +847,7 @@ graph [
   ]
   node [
     id 211
-    label "data"
+    label "datum"
   ]
   node [
     id 212
@@ -2675,7 +2675,7 @@ graph [
   ]
   node [
     id 668
-    label "set"
+    label "setting"
   ]
   node [
     id 669

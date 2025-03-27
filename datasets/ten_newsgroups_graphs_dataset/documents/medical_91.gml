@@ -1515,7 +1515,7 @@ graph [
   ]
   node [
     id 378
-    label "set"
+    label "setting"
   ]
   node [
     id 379
@@ -3523,162 +3523,158 @@ graph [
   ]
   node [
     id 880
-    label "statistic"
-  ]
-  node [
-    id 881
     label "taiwan"
   ]
   node [
-    id 882
+    id 881
     label "i"
   ]
   node [
-    id 883
+    id 882
     label "have-concession-91"
   ]
   node [
-    id 884
+    id 883
     label "statistique"
   ]
   node [
-    id 885
+    id 884
     label "sense-02"
   ]
   node [
-    id 886
+    id 885
     label "cas"
   ]
   node [
-    id 887
+    id 886
     label "sida"
   ]
   node [
-    id 888
+    id 887
     label "chine"
   ]
   node [
-    id 889
+    id 888
     label "situation"
   ]
   node [
-    id 890
+    id 889
     label "ci-dessus"
   ]
   node [
-    id 891
+    id 890
     label "refer-01"
   ]
   node [
-    id 892
+    id 891
     label "b"
   ]
   node [
-    id 893
+    id 892
     label "former"
   ]
   node [
-    id 894
+    id 893
     label "republics"
   ]
   node [
-    id 895
+    id 894
     label "bosnia"
   ]
   node [
-    id 896
+    id 895
     label "herzegovina"
   ]
   node [
-    id 897
+    id 896
     label "croatia"
   ]
   node [
-    id 898
+    id 897
     label "macedonia"
   ]
   node [
-    id 899
+    id 898
     label "montenegro"
   ]
   node [
-    id 900
+    id 899
     label "serbia"
   ]
   node [
-    id 901
+    id 900
     label "slovenia"
   ]
   node [
-    id 902
+    id 901
     label "republiques"
   ]
   node [
-    id 903
+    id 902
     label " territoires"
   ]
   node [
-    id 904
+    id 903
     label "l'ancienne"
   ]
   node [
-    id 905
+    id 904
     label "yougoslavie"
   ]
   node [
-    id 906
+    id 905
     label "54"
   ]
   node [
-    id 907
+    id 906
     label "-1"
   ]
   node [
-    id 908
+    id 907
     label "internet"
   ]
   node [
-    id 909
+    id 908
     label "fax"
   ]
   node [
-    id 910
+    id 909
     label "email-address-entity"
   ]
   node [
-    id 911
+    id 910
     label "net"
   ]
   node [
-    id 912
+    id 911
     label "1/602"
   ]
   node [
-    id 913
+    id 912
     label "1165"
   ]
   node [
-    id 914
+    id 913
     label "international"
   ]
   node [
-    id 915
+    id 914
     label "atw1h@asuacad"
   ]
   node [
-    id 916
+    id 915
     label "string-entity"
   ]
   node [
-    id 917
+    id 916
     label "fidonet=1:114/15"
   ]
   node [
-    id 918
+    id 917
     label "packet"
   ]
   node [
-    id 919
+    id 918
     label "amateur"
   ]
   edge [
@@ -6017,9 +6013,15 @@ graph [
   ]
   edge [
     source 11
-    target 881
+    target 880
     key 0
     label ":op3"
+  ]
+  edge [
+    source 11
+    target 886
+    key 0
+    label ":op1"
   ]
   edge [
     source 11
@@ -6029,7 +6031,7 @@ graph [
   ]
   edge [
     source 11
-    target 888
+    target 893
     key 0
     label ":op1"
   ]
@@ -6043,13 +6045,13 @@ graph [
     source 11
     target 895
     key 0
-    label ":op1"
+    label ":op3"
   ]
   edge [
     source 11
     target 896
     key 0
-    label ":op3"
+    label ":op1"
   ]
   edge [
     source 11
@@ -6085,29 +6087,23 @@ graph [
     source 11
     target 902
     key 0
-    label ":op1"
+    label ":op3"
   ]
   edge [
     source 11
     target 903
     key 0
-    label ":op3"
+    label ":op5"
   ]
   edge [
     source 11
     target 904
     key 0
-    label ":op5"
-  ]
-  edge [
-    source 11
-    target 905
-    key 0
     label ":op9"
   ]
   edge [
     source 11
-    target 909
+    target 908
     key 0
     label ":op1"
   ]
@@ -7523,7 +7519,7 @@ graph [
   ]
   edge [
     source 26
-    target 911
+    target 910
     key 0
     label ":mod"
   ]
@@ -8159,7 +8155,7 @@ graph [
   ]
   edge [
     source 56
-    target 893
+    target 892
     key 0
     label ":mod"
   ]
@@ -9083,7 +9079,7 @@ graph [
   ]
   edge [
     source 75
-    target 906
+    target 905
     key 0
     label ":ARG2"
   ]
@@ -9149,19 +9145,19 @@ graph [
   ]
   edge [
     source 78
-    target 882
+    target 881
     key 0
     label ":ARG0"
   ]
   edge [
     source 78
-    target 883
+    target 882
     key 0
     label ":ARG1"
   ]
   edge [
     source 78
-    target 884
+    target 883
     key 0
     label ":ARG2"
   ]
@@ -9365,7 +9361,7 @@ graph [
   ]
   edge [
     source 90
-    target 908
+    target 907
     key 0
     label ":medium"
   ]
@@ -9785,7 +9781,7 @@ graph [
   ]
   edge [
     source 113
-    target 880
+    target 698
     key 0
     label ":ARG2"
   ]
@@ -10769,7 +10765,7 @@ graph [
   ]
   edge [
     source 187
-    target 907
+    target 906
     key 0
     label ":value"
   ]
@@ -11279,13 +11275,13 @@ graph [
   ]
   edge [
     source 220
-    target 912
+    target 911
     key 0
     label ":value"
   ]
   edge [
     source 220
-    target 913
+    target 912
     key 0
     label ":value"
   ]
@@ -11993,13 +11989,13 @@ graph [
   ]
   edge [
     source 265
-    target 884
+    target 883
     key 0
     label ":ARG0"
   ]
   edge [
     source 265
-    target 889
+    target 888
     key 0
     label ":ARG1"
   ]
@@ -13319,7 +13315,7 @@ graph [
   ]
   edge [
     source 373
-    target 880
+    target 698
     key 0
     label ":ARG1"
   ]
@@ -15412,6 +15408,12 @@ graph [
     label ":ARG1"
   ]
   edge [
+    source 698
+    target 691
+    key 0
+    label ":location"
+  ]
+  edge [
     source 702
     target 195
     key 0
@@ -15671,7 +15673,7 @@ graph [
   ]
   edge [
     source 866
-    target 910
+    target 909
     key 0
     label ":snt2"
   ]
@@ -15688,110 +15690,104 @@ graph [
     label ":time"
   ]
   edge [
-    source 880
-    target 691
-    key 0
-    label ":location"
-  ]
-  edge [
-    source 883
-    target 885
+    source 882
+    target 884
     key 0
     label ":ARG1"
   ]
   edge [
-    source 883
+    source 882
     target 265
     key 0
     label ":ARG2"
   ]
   edge [
-    source 884
-    target 890
+    source 883
+    target 889
     key 0
     label ":mod"
   ]
   edge [
-    source 885
+    source 884
     target 23
     key 0
     label ":polarity"
   ]
   edge [
-    source 885
-    target 886
+    source 884
+    target 885
     key 0
     label ":ARG1"
   ]
   edge [
-    source 885
+    source 884
     target 458
     key 0
     label ":ARG2"
   ]
   edge [
-    source 886
+    source 885
     target 694
     key 0
     label ":quant"
   ]
   edge [
-    source 886
+    source 885
     target 325
     key 0
     label ":poss"
   ]
   edge [
-    source 891
-    target 892
+    source 890
+    target 891
     key 0
     label ":li"
   ]
   edge [
-    source 891
+    source 890
     target 26
     key 0
     label ":ARG1"
   ]
   edge [
-    source 891
+    source 890
     target 325
     key 0
     label ":ARG2"
   ]
   edge [
-    source 910
-    target 915
+    source 909
+    target 914
     key 0
     label ":value"
   ]
   edge [
-    source 910
-    target 916
+    source 909
+    target 915
     key 0
     label ":domain"
   ]
   edge [
-    source 911
-    target 914
+    source 910
+    target 913
     key 0
     label ":mod"
   ]
   edge [
-    source 916
-    target 917
+    source 915
+    target 916
     key 0
     label ":value"
   ]
   edge [
-    source 916
-    target 918
+    source 915
+    target 917
     key 0
     label ":mod"
   ]
   edge [
-    source 918
-    target 919
+    source 917
+    target 918
     key 0
     label ":mod"
   ]

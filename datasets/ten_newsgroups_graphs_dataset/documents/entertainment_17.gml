@@ -507,62 +507,58 @@ graph [
   ]
   node [
     id 126
-    label "time"
-  ]
-  node [
-    id 127
     label "amount"
   ]
   node [
-    id 128
+    id 127
     label "1/2"
   ]
   node [
-    id 129
+    id 128
     label "get-01"
   ]
   node [
-    id 130
+    id 129
     label "begin-01"
   ]
   node [
-    id 131
+    id 130
     label "the"
   ]
   node [
-    id 132
+    id 131
     label "next"
   ]
   node [
-    id 133
+    id 132
     label "generation"
   ]
   node [
-    id 134
+    id 133
     label "deep"
   ]
   node [
-    id 135
+    id 134
     label "space"
   ]
   node [
-    id 136
+    id 135
     label "nine"
   ]
   node [
-    id 137
+    id 136
     label "voyager"
   ]
   node [
-    id 138
+    id 137
     label "2001"
   ]
   node [
-    id 139
+    id 138
     label "follow-01"
   ]
   node [
-    id 140
+    id 139
     label "other"
   ]
   edge [
@@ -795,45 +791,51 @@ graph [
   ]
   edge [
     source 4
-    target 131
+    target 130
     key 0
     label ":op1"
+  ]
+  edge [
+    source 4
+    target 131
+    key 0
+    label ":op2"
   ]
   edge [
     source 4
     target 132
     key 0
-    label ":op2"
+    label ":op3"
   ]
   edge [
     source 4
     target 133
     key 0
-    label ":op3"
+    label ":op1"
   ]
   edge [
     source 4
     target 134
     key 0
-    label ":op1"
+    label ":op2"
   ]
   edge [
     source 4
     target 135
     key 0
-    label ":op2"
+    label ":op3"
   ]
   edge [
     source 4
     target 136
     key 0
-    label ":op3"
+    label ":op1"
   ]
   edge [
-    source 4
-    target 137
+    source 11
+    target 127
     key 0
-    label ":op1"
+    label ":quant"
   ]
   edge [
     source 12
@@ -1053,7 +1055,7 @@ graph [
   ]
   edge [
     source 31
-    target 138
+    target 137
     key 0
     label ":year"
   ]
@@ -1233,7 +1235,7 @@ graph [
   ]
   edge [
     source 44
-    target 140
+    target 139
     key 0
     label ":mod"
   ]
@@ -1779,60 +1781,54 @@ graph [
   ]
   edge [
     source 125
-    target 126
+    target 11
     key 0
     label ":ARG3"
   ]
   edge [
     source 125
-    target 127
+    target 126
     key 0
     label ":ARG4"
   ]
   edge [
-    source 126
-    target 128
-    key 0
-    label ":quant"
-  ]
-  edge [
-    source 129
-    target 127
+    source 128
+    target 126
     key 0
     label ":ARG1"
   ]
   edge [
-    source 129
+    source 128
     target 34
     key 0
     label ":ARG0"
   ]
   edge [
-    source 129
+    source 128
     target 34
     key 1
     label ":location"
   ]
   edge [
-    source 130
+    source 129
     target 3
     key 0
     label ":ARG1"
   ]
   edge [
-    source 130
+    source 129
     target 31
     key 0
     label ":time"
   ]
   edge [
-    source 139
-    target 130
+    source 138
+    target 129
     key 0
     label ":ARG1"
   ]
   edge [
-    source 139
+    source 138
     target 44
     key 0
     label ":ARG2"

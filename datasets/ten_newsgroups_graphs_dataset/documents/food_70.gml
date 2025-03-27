@@ -155,7 +155,7 @@ graph [
   ]
   node [
     id 38
-    label "data"
+    label "datum"
   ]
   node [
     id 39

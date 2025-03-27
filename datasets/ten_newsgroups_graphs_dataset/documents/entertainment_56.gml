@@ -95,7 +95,7 @@ graph [
   ]
   node [
     id 23
-    label "build"
+    label "building"
   ]
   node [
     id 24

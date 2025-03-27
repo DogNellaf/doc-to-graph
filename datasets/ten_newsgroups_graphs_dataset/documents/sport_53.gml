@@ -143,7 +143,7 @@ graph [
   ]
   node [
     id 35
-    label "athletics"
+    label "athletic"
   ]
   node [
     id 36

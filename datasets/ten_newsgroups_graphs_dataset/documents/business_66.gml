@@ -191,7 +191,7 @@ graph [
   ]
   node [
     id 47
-    label "further"
+    label "far"
   ]
   node [
     id 48
@@ -387,7 +387,7 @@ graph [
   ]
   node [
     id 96
-    label "time"
+    label "times"
   ]
   node [
     id 97

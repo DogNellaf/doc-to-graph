@@ -1175,7 +1175,7 @@ graph [
   ]
   node [
     id 293
-    label "barb"
+    label "barbed"
   ]
   node [
     id 294

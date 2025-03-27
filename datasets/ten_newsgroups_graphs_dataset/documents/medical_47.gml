@@ -1611,7 +1611,7 @@ graph [
   ]
   node [
     id 402
-    label "electronic"
+    label "electronics"
   ]
   edge [
     source 0

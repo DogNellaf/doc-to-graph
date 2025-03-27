@@ -215,118 +215,114 @@ graph [
   ]
   node [
     id 53
-    label "indoors"
-  ]
-  node [
-    id 54
     label "since"
   ]
   node [
-    id 55
+    id 54
     label "2000"
   ]
   node [
-    id 56
+    id 55
     label "believe-01"
   ]
   node [
-    id 57
+    id 56
     label "knock-01"
   ]
   node [
-    id 58
+    id 57
     label "lack-01"
   ]
   node [
-    id 59
+    id 58
     label "confident-01"
   ]
   node [
-    id 60
+    id 59
     label "experience-01"
   ]
   node [
-    id 61
+    id 60
     label "part"
   ]
   node [
-    id 62
+    id 61
     label "early"
   ]
   node [
-    id 63
+    id 62
     label "season"
   ]
   node [
-    id 64
+    id 63
     label "stress-02"
   ]
   node [
-    id 65
+    id 64
     label "it"
   ]
   node [
-    id 66
+    id 65
     label "use-02"
   ]
   node [
-    id 67
+    id 66
     label "feel-01"
   ]
   node [
-    id 68
+    id 67
     label "this"
   ]
   node [
-    id 69
+    id 68
     label "train-01"
   ]
   node [
-    id 70
+    id 69
     label "just"
   ]
   node [
-    id 71
+    id 70
     label "do-02"
   ]
   node [
-    id 72
+    id 71
     label "kind"
   ]
   node [
-    id 73
+    id 72
     label "go-06"
   ]
   node [
-    id 74
+    id 73
     label "event"
   ]
   node [
-    id 75
+    id 74
     label "birmingham"
   ]
   node [
-    id 76
+    id 75
     label "grand"
   ]
   node [
-    id 77
+    id 76
     label "prix"
   ]
   node [
-    id 78
+    id 77
     label "class"
   ]
   node [
-    id 79
+    id 78
     label "high-02"
   ]
   node [
-    id 80
+    id 79
     label "2"
   ]
   node [
-    id 81
+    id 80
     label "18"
   ]
   edge [
@@ -451,19 +447,19 @@ graph [
   ]
   edge [
     source 6
-    target 75
+    target 74
     key 0
     label ":op1"
   ]
   edge [
     source 6
-    target 76
+    target 75
     key 0
     label ":op2"
   ]
   edge [
     source 6
-    target 77
+    target 76
     key 0
     label ":op3"
   ]
@@ -535,19 +531,19 @@ graph [
   ]
   edge [
     source 19
-    target 55
+    target 54
     key 0
     label ":year"
   ]
   edge [
     source 19
-    target 80
+    target 79
     key 0
     label ":month"
   ]
   edge [
     source 19
-    target 81
+    target 80
     key 0
     label ":day"
   ]
@@ -661,7 +657,7 @@ graph [
   ]
   edge [
     source 28
-    target 71
+    target 70
     key 0
     label ":condition"
   ]
@@ -739,7 +735,7 @@ graph [
   ]
   edge [
     source 42
-    target 64
+    target 63
     key 0
     label ":ARG1"
   ]
@@ -805,7 +801,7 @@ graph [
   ]
   edge [
     source 47
-    target 56
+    target 55
     key 0
     label ":op2"
   ]
@@ -835,7 +831,7 @@ graph [
   ]
   edge [
     source 50
-    target 72
+    target 71
     key 0
     label ":mod"
   ]
@@ -859,19 +855,19 @@ graph [
   ]
   edge [
     source 51
-    target 53
+    target 9
     key 0
     label ":location"
   ]
   edge [
     source 51
-    target 54
+    target 53
     key 0
     label ":time"
   ]
   edge [
     source 51
-    target 74
+    target 73
     key 0
     label ":ARG3"
   ]
@@ -894,26 +890,38 @@ graph [
     label ":ARG1"
   ]
   edge [
-    source 54
+    source 53
     target 19
     key 0
     label ":op1"
   ]
   edge [
-    source 56
+    source 55
     target 2
     key 0
     label ":ARG0"
   ]
   edge [
+    source 55
+    target 56
+    key 0
+    label ":ARG1"
+  ]
+  edge [
     source 56
     target 57
+    key 0
+    label ":ARG0"
+  ]
+  edge [
+    source 56
+    target 58
     key 0
     label ":ARG1"
   ]
   edge [
     source 57
-    target 58
+    target 2
     key 0
     label ":ARG0"
   ]
@@ -924,152 +932,140 @@ graph [
     label ":ARG1"
   ]
   edge [
+    source 57
+    target 60
+    key 0
+    label ":time"
+  ]
+  edge [
     source 58
     target 2
     key 0
-    label ":ARG0"
-  ]
-  edge [
-    source 58
-    target 60
-    key 0
     label ":ARG1"
-  ]
-  edge [
-    source 58
-    target 61
-    key 0
-    label ":time"
   ]
   edge [
     source 59
     target 2
     key 0
-    label ":ARG1"
-  ]
-  edge [
-    source 60
-    target 2
-    key 0
     label ":ARG0"
   ]
   edge [
-    source 61
-    target 62
-    key 0
-    label ":mod"
-  ]
-  edge [
-    source 61
-    target 68
-    key 0
-    label ":mod"
-  ]
-  edge [
-    source 63
+    source 60
     target 61
+    key 0
+    label ":mod"
+  ]
+  edge [
+    source 60
+    target 67
+    key 0
+    label ":mod"
+  ]
+  edge [
+    source 62
+    target 60
     key 0
     label ":part"
   ]
   edge [
-    source 64
-    target 65
+    source 63
+    target 64
     key 0
     label ":domain"
   ]
   edge [
-    source 66
+    source 65
     target 1
     key 0
     label ":polarity"
   ]
   edge [
-    source 66
+    source 65
     target 2
     key 0
     label ":ARG0"
   ]
   edge [
-    source 66
-    target 67
+    source 65
+    target 66
     key 0
     label ":ARG1"
   ]
   edge [
-    source 66
+    source 65
+    target 68
+    key 0
+    label ":ARG1"
+  ]
+  edge [
+    source 65
     target 69
-    key 0
-    label ":ARG1"
-  ]
-  edge [
-    source 66
-    target 70
     key 0
     label ":mod"
   ]
   edge [
-    source 67
+    source 66
     target 2
     key 0
     label ":ARG0"
   ]
   edge [
-    source 67
-    target 58
+    source 66
+    target 57
     key 0
     label ":ARG1"
   ]
   edge [
-    source 69
+    source 68
     target 2
     key 0
     label ":ARG2"
   ]
   edge [
-    source 71
+    source 70
     target 2
     key 0
     label ":ARG0"
   ]
   edge [
-    source 71
+    source 70
     target 50
     key 0
     label ":ARG1"
   ]
   edge [
-    source 72
-    target 68
+    source 71
+    target 67
     key 0
     label ":mod"
   ]
   edge [
-    source 73
+    source 72
     target 50
     key 0
     label ":manner"
   ]
   edge [
-    source 73
-    target 65
+    source 72
+    target 64
     key 0
     label ":ARG0"
   ]
   edge [
-    source 74
+    source 73
     target 6
     key 0
     label ":name"
   ]
   edge [
-    source 74
-    target 78
+    source 73
+    target 77
     key 0
     label ":mod"
   ]
   edge [
-    source 79
-    target 78
+    source 78
+    target 77
     key 0
     label ":ARG1"
   ]

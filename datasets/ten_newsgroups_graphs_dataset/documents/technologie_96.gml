@@ -367,7 +367,7 @@ graph [
   ]
   node [
     id 91
-    label "logistic"
+    label "logistics"
   ]
   node [
     id 92

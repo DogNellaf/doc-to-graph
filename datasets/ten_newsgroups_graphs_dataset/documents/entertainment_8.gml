@@ -83,7 +83,7 @@ graph [
   ]
   node [
     id 20
-    label "medium"
+    label "media"
   ]
   node [
     id 21

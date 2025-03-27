@@ -223,7 +223,7 @@ graph [
   ]
   node [
     id 55
-    label "aerodynamic"
+    label "aerodynamics"
   ]
   node [
     id 56

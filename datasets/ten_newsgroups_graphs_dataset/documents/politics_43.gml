@@ -39,7 +39,7 @@ graph [
   ]
   node [
     id 9
-    label "politics"
+    label "politic"
   ]
   node [
     id 10

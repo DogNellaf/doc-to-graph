@@ -3,7 +3,7 @@ graph [
   multigraph 1
   node [
     id 0
-    label "nut"
+    label "nuts"
   ]
   node [
     id 1
@@ -443,7 +443,7 @@ graph [
   ]
   node [
     id 110
-    label "dynamic"
+    label "dynamics"
   ]
   node [
     id 111

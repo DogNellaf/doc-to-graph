@@ -799,7 +799,7 @@ graph [
   ]
   node [
     id 199
-    label "hold"
+    label "holding"
   ]
   node [
     id 200
@@ -2079,7 +2079,7 @@ graph [
   ]
   node [
     id 519
-    label "mathematics"
+    label "mathematic"
   ]
   node [
     id 520
@@ -2091,7 +2091,7 @@ graph [
   ]
   node [
     id 522
-    label "medium"
+    label "media"
   ]
   node [
     id 523

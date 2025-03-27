@@ -91,7 +91,7 @@ graph [
   ]
   node [
     id 22
-    label "electronic"
+    label "electronics"
   ]
   node [
     id 23

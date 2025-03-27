@@ -279,7 +279,7 @@ graph [
   ]
   node [
     id 69
-    label "further"
+    label "far"
   ]
   node [
     id 70

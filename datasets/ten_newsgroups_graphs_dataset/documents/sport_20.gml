@@ -75,7 +75,7 @@ graph [
   ]
   node [
     id 18
-    label "athletics"
+    label "athletic"
   ]
   node [
     id 19

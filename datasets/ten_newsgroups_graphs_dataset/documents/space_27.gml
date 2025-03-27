@@ -323,7 +323,7 @@ graph [
   ]
   node [
     id 80
-    label "dynamic"
+    label "dynamics"
   ]
   node [
     id 81

@@ -71,7 +71,7 @@ graph [
   ]
   node [
     id 17
-    label "further"
+    label "far"
   ]
   node [
     id 18
@@ -351,7 +351,7 @@ graph [
   ]
   node [
     id 87
-    label "data"
+    label "datum"
   ]
   node [
     id 88

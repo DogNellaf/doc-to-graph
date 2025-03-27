@@ -167,7 +167,7 @@ graph [
   ]
   node [
     id 41
-    label "data"
+    label "datum"
   ]
   node [
     id 42
@@ -879,7 +879,7 @@ graph [
   ]
   node [
     id 219
-    label "belate"
+    label "belated"
   ]
   node [
     id 220

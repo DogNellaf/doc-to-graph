@@ -315,7 +315,7 @@ graph [
   ]
   node [
     id 78
-    label "electronic"
+    label "electronics"
   ]
   node [
     id 79

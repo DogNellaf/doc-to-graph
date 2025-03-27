@@ -515,7 +515,7 @@ graph [
   ]
   node [
     id 128
-    label "diabetes"
+    label "diabete"
   ]
   node [
     id 129

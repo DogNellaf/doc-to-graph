@@ -203,7 +203,7 @@ graph [
   ]
   node [
     id 50
-    label "further"
+    label "far"
   ]
   node [
     id 51

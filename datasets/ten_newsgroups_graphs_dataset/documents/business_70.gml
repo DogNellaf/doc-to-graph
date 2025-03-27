@@ -91,7 +91,7 @@ graph [
   ]
   node [
     id 22
-    label "data"
+    label "datum"
   ]
   node [
     id 23

@@ -499,7 +499,7 @@ graph [
   ]
   node [
     id 124
-    label "further"
+    label "far"
   ]
   node [
     id 125

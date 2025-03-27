@@ -239,7 +239,7 @@ graph [
   ]
   node [
     id 59
-    label "build"
+    label "building"
   ]
   node [
     id 60

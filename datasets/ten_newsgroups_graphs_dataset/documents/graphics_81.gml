@@ -351,7 +351,7 @@ graph [
   ]
   node [
     id 87
-    label "medium"
+    label "media"
   ]
   node [
     id 88

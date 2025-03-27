@@ -323,7 +323,7 @@ graph [
   ]
   node [
     id 80
-    label "study"
+    label "studies"
   ]
   node [
     id 81

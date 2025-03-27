@@ -27,7 +27,7 @@ graph [
   ]
   node [
     id 6
-    label "mathematics"
+    label "mathematic"
   ]
   node [
     id 7
@@ -307,7 +307,7 @@ graph [
   ]
   node [
     id 76
-    label "politics"
+    label "politic"
   ]
   node [
     id 77

@@ -35,7 +35,7 @@ graph [
   ]
   node [
     id 8
-    label "medium"
+    label "media"
   ]
   node [
     id 9

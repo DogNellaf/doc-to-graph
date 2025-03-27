@@ -119,7 +119,7 @@ graph [
   ]
   node [
     id 29
-    label "further"
+    label "far"
   ]
   node [
     id 30

@@ -267,7 +267,7 @@ graph [
   ]
   node [
     id 66
-    label "championships"
+    label "championship"
   ]
   node [
     id 67

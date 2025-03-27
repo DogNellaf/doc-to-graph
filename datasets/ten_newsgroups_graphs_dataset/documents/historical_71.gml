@@ -727,7 +727,7 @@ graph [
   ]
   node [
     id 181
-    label "mathematics"
+    label "mathematic"
   ]
   node [
     id 182

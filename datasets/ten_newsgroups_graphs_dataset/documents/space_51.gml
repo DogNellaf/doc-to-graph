@@ -175,7 +175,7 @@ graph [
   ]
   node [
     id 43
-    label "corp"
+    label "corps"
   ]
   node [
     id 44
@@ -1487,7 +1487,7 @@ graph [
   ]
   node [
     id 371
-    label "mathematics"
+    label "mathematic"
   ]
   node [
     id 372

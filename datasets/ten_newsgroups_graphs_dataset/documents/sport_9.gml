@@ -439,14 +439,10 @@ graph [
   ]
   node [
     id 109
-    label "indoors"
-  ]
-  node [
-    id 110
     label "well"
   ]
   node [
-    id 111
+    id 110
     label "then"
   ]
   edge [
@@ -1555,7 +1551,7 @@ graph [
   ]
   edge [
     source 105
-    target 111
+    target 110
     key 0
     label ":op1"
   ]
@@ -1573,7 +1569,7 @@ graph [
   ]
   edge [
     source 106
-    target 109
+    target 45
     key 0
     label ":location"
   ]
@@ -1597,7 +1593,7 @@ graph [
   ]
   edge [
     source 108
-    target 110
+    target 109
     key 0
     label ":degree"
   ]

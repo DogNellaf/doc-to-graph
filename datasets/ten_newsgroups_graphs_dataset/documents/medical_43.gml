@@ -175,7 +175,7 @@ graph [
   ]
   node [
     id 43
-    label "time"
+    label "times"
   ]
   node [
     id 44
@@ -283,150 +283,154 @@ graph [
   ]
   node [
     id 70
-    label "ethics"
+    label "placebos"
   ]
   node [
     id 71
-    label "of-course"
+    label "ethics"
   ]
   node [
     id 72
-    label "dispense-01"
+    label "of-course"
   ]
   node [
     id 73
-    label "i"
+    label "dispense-01"
   ]
   node [
     id 74
-    label "take-04"
+    label "i"
   ]
   node [
     id 75
-    label "end-01"
+    label "take-04"
   ]
   node [
     id 76
-    label "even"
+    label "end-01"
   ]
   node [
     id 77
-    label "anyone"
+    label "even"
   ]
   node [
     id 78
-    label "serious-01"
+    label "anyone"
   ]
   node [
     id 79
-    label "mathematics"
+    label "serious-01"
   ]
   node [
     id 80
-    label "statistic"
+    label "mathematic"
   ]
   node [
     id 81
-    label "post-01"
+    label "statistic"
   ]
   node [
     id 82
-    label "hope-01"
+    label "post-01"
   ]
   node [
     id 83
-    label "need-01"
+    label "hope-01"
   ]
   node [
     id 84
-    label "on-ones-mind-07"
+    label "need-01"
   ]
   node [
     id 85
-    label "only"
+    label "on-ones-mind-07"
   ]
   node [
     id 86
-    label "ron"
+    label "only"
   ]
   node [
     id 87
-    label "at-least"
+    label "ron"
   ]
   node [
     id 88
-    label "emoticon"
+    label "at-least"
   ]
   node [
     id 89
-    label "you"
+    label "emoticon"
   ]
   node [
     id 90
-    label ";-) ) :time ( end ) :purpose ( help-01 :arg0 person_0 :arg1 ( understand-01 :arg0 ( anyone ) :arg1 ( thing_3 :arg1-of ( calculate-01 :arg0 you :location ( above ) ) ) ) :arg2 anyone ) :condition ( have-polarity-91 :arg1 on-ones-mind-07 :arg2 - ) ) ) :snt3 ( person_1 :name ( name_1 :op1 "
+    label "you"
   ]
   node [
     id 91
-    label "leave-13"
+    label ";-) ) :time ( end ) :purpose ( help-01 :arg0 person_0 :arg1 ( understand-01 :arg0 ( anyone ) :arg1 ( thing_3 :arg1-of ( calculate-01 :arg0 you :location ( above ) ) ) ) :arg2 anyone ) :condition ( have-polarity-91 :arg1 on-ones-mind-07 :arg2 - ) ) ) :snt3 ( person_1 :name ( name_1 :op1 "
   ]
   node [
     id 92
-    label "mind"
+    label "leave-13"
   ]
   node [
     id 93
-    label "blank"
+    label "mind"
   ]
   node [
     id 94
-    label "this"
+    label "blank"
   ]
   node [
     id 95
-    label "intend-01"
+    label "this"
   ]
   node [
     id 96
-    label "company"
+    label "intend-01"
   ]
   node [
     id 97
-    label "usenet"
+    label "company"
   ]
   node [
     id 98
-    label "phone-number-entity"
+    label "usenet"
   ]
   node [
     id 99
-    label "rosemail"
+    label "phone-number-entity"
   ]
   node [
     id 100
-    label "2.10"
+    label "rosemail"
   ]
   node [
     id 101
-    label "rose"
+    label "2.10"
   ]
   node [
     id 102
-    label "media"
+    label "rose"
   ]
   node [
     id 103
-    label "hamilton"
+    label "media"
   ]
   node [
     id 104
-    label "mean-01"
+    label "hamilton"
   ]
   node [
     id 105
-    label "city"
+    label "mean-01"
   ]
   node [
     id 106
+    label "city"
+  ]
+  node [
+    id 107
     label "575-5363"
   ]
   edge [
@@ -545,13 +549,7 @@ graph [
   ]
   edge [
     source 4
-    target 86
-    key 0
-    label ":op1"
-  ]
-  edge [
-    source 4
-    target 99
+    target 87
     key 0
     label ":op1"
   ]
@@ -559,23 +557,29 @@ graph [
     source 4
     target 100
     key 0
-    label ":op2"
+    label ":op1"
   ]
   edge [
     source 4
     target 101
     key 0
-    label ":op1"
+    label ":op2"
   ]
   edge [
     source 4
     target 102
     key 0
-    label ":op2"
+    label ":op1"
   ]
   edge [
     source 4
     target 103
+    key 0
+    label ":op2"
+  ]
+  edge [
+    source 4
+    target 104
     key 0
     label ":op1"
   ]
@@ -665,13 +669,13 @@ graph [
   ]
   edge [
     source 19
-    target 79
+    target 80
     key 0
     label ":op1"
   ]
   edge [
     source 19
-    target 80
+    target 81
     key 0
     label ":op2"
   ]
@@ -773,7 +777,7 @@ graph [
   ]
   edge [
     source 32
-    target 71
+    target 72
     key 0
     label ":mod"
   ]
@@ -959,13 +963,13 @@ graph [
   ]
   edge [
     source 49
-    target 87
+    target 88
     key 0
     label ":quant"
   ]
   edge [
     source 49
-    target 88
+    target 89
     key 0
     label ":mod"
   ]
@@ -1169,13 +1173,13 @@ graph [
   ]
   edge [
     source 67
-    target 82
+    target 83
     key 0
     label ":snt1"
   ]
   edge [
     source 67
-    target 83
+    target 84
     key 0
     label ":snt2"
   ]
@@ -1187,7 +1191,7 @@ graph [
   ]
   edge [
     source 68
-    target 41
+    target 70
     key 0
     label ":ARG2"
   ]
@@ -1199,222 +1203,222 @@ graph [
   ]
   edge [
     source 68
-    target 70
-    key 0
-    label ":mod"
-  ]
-  edge [
-    source 68
     target 71
     key 0
     label ":mod"
   ]
   edge [
-    source 69
-    target 73
+    source 68
+    target 72
     key 0
-    label ":ARG0"
+    label ":mod"
   ]
   edge [
     source 69
     target 74
     key 0
-    label ":ARG1"
+    label ":ARG0"
   ]
   edge [
     source 69
     target 75
     key 0
-    label ":time"
+    label ":ARG1"
   ]
   edge [
     source 69
     target 76
     key 0
+    label ":time"
+  ]
+  edge [
+    source 69
+    target 77
+    key 0
     label ":mod"
   ]
   edge [
-    source 72
-    target 41
+    source 73
+    target 70
     key 0
     label ":ARG1"
   ]
   edge [
-    source 74
+    source 75
     target 16
     key 0
     label ":polarity"
   ]
   edge [
-    source 74
-    target 77
+    source 75
+    target 78
     key 0
     label ":ARG0"
   ]
   edge [
-    source 74
+    source 75
     target 19
     key 0
     label ":ARG1"
   ]
   edge [
-    source 74
-    target 78
+    source 75
+    target 79
     key 0
     label ":ARG2"
   ]
   edge [
-    source 81
+    source 82
     target 49
     key 0
     label ":ARG1"
   ]
   edge [
-    source 81
-    target 73
+    source 82
+    target 74
     key 0
     label ":ARG0"
   ]
   edge [
-    source 81
+    source 82
     target 1
     key 0
     label ":ARG0"
   ]
   edge [
-    source 82
-    target 73
+    source 83
+    target 74
     key 0
     label ":ARG0"
   ]
   edge [
-    source 82
-    target 84
+    source 83
+    target 85
     key 0
     label ":ARG1"
   ]
   edge [
-    source 82
-    target 85
+    source 83
+    target 86
     key 0
     label ":mod"
   ]
   edge [
-    source 83
-    target 89
+    source 84
+    target 90
     key 0
     label ":ARG0"
   ]
   edge [
-    source 83
+    source 84
     target 49
     key 0
     label ":ARG1"
   ]
   edge [
-    source 84
+    source 85
     target 1
     key 0
     label ":ARG1"
   ]
   edge [
-    source 84
+    source 85
     target 49
     key 0
     label ":ARG2"
   ]
   edge [
-    source 84
+    source 85
     target 49
     key 1
     label ":topic"
   ]
   edge [
-    source 87
+    source 88
     target 45
     key 0
     label ":op1"
   ]
   edge [
-    source 88
-    target 90
+    source 89
+    target 91
     key 0
     label ":value"
   ]
   edge [
-    source 91
-    target 92
-    key 0
-    label ":ARG1"
-  ]
-  edge [
-    source 91
+    source 92
     target 93
     key 0
-    label ":ARG2"
+    label ":ARG1"
   ]
   edge [
     source 92
     target 94
     key 0
+    label ":ARG2"
+  ]
+  edge [
+    source 93
+    target 95
+    key 0
     label ":mod"
   ]
   edge [
-    source 95
-    target 91
+    source 96
+    target 92
     key 0
     label ":ARG1"
   ]
   edge [
-    source 96
+    source 97
     target 4
     key 0
     label ":name"
   ]
   edge [
-    source 96
-    target 97
+    source 97
+    target 98
     key 0
     label ":mod"
   ]
   edge [
-    source 96
-    target 98
+    source 97
+    target 99
     key 0
     label ":ARG2"
   ]
   edge [
-    source 98
-    target 106
+    source 99
+    target 107
     key 0
     label ":value"
   ]
   edge [
-    source 104
-    target 96
+    source 105
+    target 97
     key 0
     label ":ARG0"
   ]
   edge [
-    source 104
-    target 96
+    source 105
+    target 97
     key 1
     label ":ARG1"
   ]
   edge [
-    source 104
+    source 105
     target 4
     key 0
     label ":name"
   ]
   edge [
-    source 104
-    target 105
+    source 105
+    target 106
     key 0
     label ":location"
   ]
   edge [
-    source 105
+    source 106
     target 4
     key 0
     label ":name"

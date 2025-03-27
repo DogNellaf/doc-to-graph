@@ -19,7 +19,7 @@ if __name__ == '__main__':
     parser.add_argument('--dataset', type=str, default='ten_newsgroups', choices=['ten_newsgroups', 'bbcsport'],
                         help='dataset to process.')
 
-    parser.add_argument('--operation', type=str, default='document_graph_conversion',
+    parser.add_argument('--operation', type=str, default='document_preprocessing',
                         choices=['file_renaming', 'indexation', 'document_preprocessing', 'document_graph_conversion'],
                         help='operation to be performed.')
 

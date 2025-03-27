@@ -1,4 +1,5 @@
 import re
+import time
 import spacy
 import amrlib
 import shutil
@@ -6,10 +7,9 @@ import penman
 import pandas as pd
 import networkx as nx
 import ray
-from math import ceil
+from tqdm import tqdm
 
-BATCH_SIZE = 20                # Количество предложений в одном батче
-NUM_SENTENCE_PROCESSORS = 8    # Количество акторов для обработки предложений
+# Функции, как в оригинальном коде
 
 def draw_graph(graph, graph_name):
     dot_graph = nx.nx_agraph.to_agraph(graph)
@@ -17,6 +17,24 @@ def draw_graph(graph, graph_name):
     new_graph_name = f"{graph_name}.png"
     dot_graph.draw(new_graph_name)
     return new_graph_name
+
+def save_graphs(graphs, graphs_dataset_file_name, mode):
+    for graph_name, graph in graphs.items():
+        nx.write_gml(graph, f"{graph_name}.gml")
+        path = f"{graphs_dataset_file_name}/{mode}/{graph_name}.gml"
+        shutil.move(f"{graph_name}.gml", path)
+
+def merge_graphs(sent_graphs):
+    merged_graph = nx.MultiDiGraph()
+    for graph in sent_graphs.values():
+        for edge in graph.edges(data=True):
+            if edge not in merged_graph.edges(data=True):
+                merged_graph.add_edge(edge[0], edge[1], label=edge[2]['label'])
+    if not list(nx.isolates(merged_graph)):
+        return merged_graph
+    else:
+        print("Merged graph isn't connected. Problematic.")
+        return 0
 
 def lemmatize(doc, lemma_dict):
     for token in doc:
@@ -78,24 +96,34 @@ def modify_graph(graph):
         print("Modified graph isn't connected. Problematic.")
         return 0
 
+# Параллельная обработка на уровне документов
 @ray.remote
-class SentenceProcessor:
+class DocumentProcessor:
     def __init__(self):
-        # Если понадобится, можно инициализировать ресурсы (например, модель) один раз
-        pass
-
-    def process_batch(self, batch):
-        """
-        batch: список кортежей (sentence_index, amr_graph_str, lemma_dict)
-        Возвращает список кортежей (sentence_index, refined_graph)
-        """
-        results = []
-        for sentence_index, amr_graph_str, lemma_dict in batch:
+        amrlib.setup_spacy_extension()
+        self.nlp = spacy.load('en_core_web_sm')
+    
+    def process_document(self, document_index, document_text, document_frame, graphs_dataset_file_name, mode):
+        sent_graphs = {}
+        doc = self.nlp(document_text)
+        lemma_dict = {}
+        lemma_dict = lemmatize(doc, lemma_dict)
+        try:
+            amr_graphs = doc._.to_amr()
+        except Exception as e:
+            print(f"Error converting document {document_index} to AMR: {e}")
+            return document_index
+        
+        if len(amr_graphs) != len(document_frame):
+            print(f"Sentence count mismatch for document {document_index}")
+            return document_index
+        
+        for idx, amr_graph_str in enumerate(amr_graphs):
+            sentence_index = document_frame.iloc[idx]['sentence_index']
             try:
                 penman_graph = penman.decode(amr_graph_str)
             except Exception as e:
                 print(f"Decoding error for sentence {sentence_index}: {e}")
-                results.append((sentence_index, None))
                 continue
 
             temp_graph = nx.MultiDiGraph()
@@ -109,109 +137,52 @@ class SentenceProcessor:
             modified_graph = modify_graph(temp_graph)
             if modified_graph == 0:
                 print(f"Modification error for sentence {sentence_index}")
-                results.append((sentence_index, None))
                 continue
 
             refined_graph = refine_graph(modified_graph, lemma_dict)
-            results.append((sentence_index, refined_graph))
-        return results
+            sent_graphs[str(sentence_index)] = refined_graph
 
-@ray.remote
-def remote_save_graphs(graphs, graphs_dataset_file_name, mode):
-    """
-    Сохраняет графы асинхронно.
-    """
-    for graph_name, graph in graphs.items():
-        nx.write_gml(graph, f"{graph_name}.gml")
-        path = f"{graphs_dataset_file_name}/{mode}/{graph_name}.gml"
-        shutil.move(f"{graph_name}.gml", path)
-    return True
+            if mode in ['all', 'sentences']:
+                save_graphs({str(sentence_index): refined_graph}, graphs_dataset_file_name, mode='sentences')
 
-@ray.remote
-def remote_merge_graphs(sent_graphs):
-    merged_graph = nx.MultiDiGraph()
-    for graph in sent_graphs.values():
-        for edge in graph.edges(data=True):
-            if edge not in merged_graph.edges(data=True):
-                merged_graph.add_edge(edge[0], edge[1], label=edge[2]['label'])
-    if not list(nx.isolates(merged_graph)):
-        return merged_graph
-    else:
-        print("Merged graph isn't connected. Problematic.")
-        return 0
+        if mode in ['all', 'documents'] and sent_graphs:
+            merged_graph = merge_graphs(sent_graphs)
+            if merged_graph != 0:
+                doc_graph = {str(document_index): merged_graph}
+                save_graphs(doc_graph, graphs_dataset_file_name, mode='documents')
 
-@ray.remote(num_gpus=1)
-def process_document(document_index, document_text, document_frame, graphs_dataset_file_name, mode, sentence_processors):
-    # Инициализируем amrlib и spaCy (GPU используется для документа)
-    amrlib.setup_spacy_extension()
-    nlp = spacy.load('en_core_web_sm')
-    doc = nlp(document_text)
-    lemma_dict = {}
-    lemma_dict = lemmatize(doc, lemma_dict)
-    try:
-        amr_graphs = doc._.to_amr()
-    except Exception as e:
-        print(f"Error converting document {document_index} to AMR: {e}")
+        print(f"Document {document_index} processed.")
         return document_index
-
-    # Формирование батчей предложений
-    sentence_batches = []
-    current_batch = []
-    for idx, amr_graph_str in enumerate(amr_graphs):
-        sentence_index = document_frame.iloc[idx]['sentence_index']
-        current_batch.append((sentence_index, amr_graph_str, lemma_dict))
-        if len(current_batch) == BATCH_SIZE:
-            sentence_batches.append(current_batch)
-            current_batch = []
-    if current_batch:
-        sentence_batches.append(current_batch)
-
-    # Распределяем батчи между актерами SentenceProcessor
-    batch_tasks = []
-    num_processors = len(sentence_processors)
-    for i, batch in enumerate(sentence_batches):
-        actor = sentence_processors[i % num_processors]
-        batch_tasks.append(actor.process_batch.remote(batch))
-    batch_results = ray.get(batch_tasks)
-
-    sent_graphs = {}
-    save_tasks = []
-    for batch in batch_results:
-        for sentence_index, refined_graph in batch:
-            if refined_graph is not None:
-                sent_graphs[str(sentence_index)] = refined_graph
-                if mode in ['all', 'sentences']:
-                    # Асинхронное сохранение графа предложения
-                    save_tasks.append(
-                        remote_save_graphs.remote({str(sentence_index): refined_graph}, graphs_dataset_file_name, 'sentences')
-                    )
-    # Ожидаем завершения сохранения предложений
-    ray.wait(save_tasks, num_returns=len(save_tasks))
-
-    if mode in ['all', 'documents'] and sent_graphs:
-        merged_graph = ray.get(remote_merge_graphs.remote(sent_graphs))
-        if merged_graph != 0:
-            doc_graph = {str(document_index): merged_graph}
-            # Асинхронное сохранение объединённого графа документа
-            ray.wait([remote_save_graphs.remote(doc_graph, graphs_dataset_file_name, 'documents')])
-    print(f"Document {document_index} processed.")
-    return document_index
 
 def convert_documents(dataset, preprocessed_documents_csv_file_name, preprocessed_sentences_csv_file_name, graphs_dataset_file_name, mode):
     print(f"Obtaining {mode} graphs for the {dataset} dataset...")
     doc_df = pd.read_csv(preprocessed_documents_csv_file_name)
     sent_df = pd.read_csv(preprocessed_sentences_csv_file_name)
     documents = sent_df.groupby('document_index', sort=False)
-
-    # Инициализируем пул акторов для обработки предложений
-    sentence_processors = [SentenceProcessor.remote() for _ in range(NUM_SENTENCE_PROCESSORS)]
-
+    
+    NUM_DOCUMENT_PROCESSORS = 4
+    document_processors = [DocumentProcessor.remote() for _ in range(NUM_DOCUMENT_PROCESSORS)]
+    
     doc_tasks = []
-    for document_index, document_frame in documents:
+    for i, (document_index, document_frame) in enumerate(documents):
         document_text = doc_df.loc[doc_df['document_index'] == document_index]['document'].values[0]
+        processor = document_processors[i % NUM_DOCUMENT_PROCESSORS]
         doc_tasks.append(
-            process_document.remote(document_index, document_text, document_frame,
-                                      graphs_dataset_file_name, mode, sentence_processors)
+            processor.process_document.remote(document_index, document_text, document_frame,
+                                                graphs_dataset_file_name, mode)
         )
-    results = ray.get(doc_tasks)
-    print(f"Processing finished for documents: {results}")
+
+    # Используем tqdm для отображения прогресса выполнения
+    start_time = time.time()
+    pbar = tqdm(total=len(doc_tasks), desc="Processing documents", unit="doc")
+    completed = 0
+    while doc_tasks:
+        done, doc_tasks = ray.wait(doc_tasks, num_returns=1, timeout=1)
+        if done:
+            completed += len(done)
+            elapsed = time.time() - start_time
+            pbar.update(len(done))
+            pbar.set_postfix_str(f"Elapsed: {elapsed:.2f}s")
+    pbar.close()
+    
+    print("All documents processed.")

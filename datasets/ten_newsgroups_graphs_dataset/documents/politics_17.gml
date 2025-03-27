@@ -407,7 +407,7 @@ graph [
   ]
   node [
     id 101
-    label "politics"
+    label "politic"
   ]
   node [
     id 102

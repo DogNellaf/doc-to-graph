@@ -103,7 +103,7 @@ graph [
   ]
   node [
     id 25
-    label "bio"
+    label "bios"
   ]
   node [
     id 26

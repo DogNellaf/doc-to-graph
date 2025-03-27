@@ -135,7 +135,7 @@ graph [
   ]
   node [
     id 33
-    label "athletics"
+    label "athletic"
   ]
   node [
     id 34

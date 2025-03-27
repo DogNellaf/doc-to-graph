@@ -7,7 +7,7 @@ graph [
   ]
   node [
     id 1
-    label "data"
+    label "datum"
   ]
   node [
     id 2

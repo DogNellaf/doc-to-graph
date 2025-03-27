@@ -467,7 +467,7 @@ graph [
   ]
   node [
     id 116
-    label "further"
+    label "far"
   ]
   node [
     id 117

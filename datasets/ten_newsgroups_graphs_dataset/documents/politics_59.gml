@@ -383,7 +383,7 @@ graph [
   ]
   node [
     id 95
-    label "further"
+    label "far"
   ]
   node [
     id 96

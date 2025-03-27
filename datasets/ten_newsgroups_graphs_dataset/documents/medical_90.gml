@@ -687,7 +687,7 @@ graph [
   ]
   node [
     id 171
-    label "data"
+    label "datum"
   ]
   node [
     id 172
@@ -1967,7 +1967,7 @@ graph [
   ]
   node [
     id 491
-    label "mean"
+    label "means"
   ]
   node [
     id 492
@@ -2007,7 +2007,7 @@ graph [
   ]
   node [
     id 501
-    label "diabetes"
+    label "diabete"
   ]
   node [
     id 502
@@ -2719,7 +2719,7 @@ graph [
   ]
   node [
     id 679
-    label "build"
+    label "building"
   ]
   node [
     id 680
@@ -4619,7 +4619,7 @@ graph [
   ]
   node [
     id 1154
-    label "communications"
+    label "communication"
   ]
   node [
     id 1155

@@ -615,7 +615,7 @@ graph [
   ]
   node [
     id 153
-    label "outdoor"
+    label "outdoors"
   ]
   node [
     id 154

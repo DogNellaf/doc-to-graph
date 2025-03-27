@@ -447,7 +447,7 @@ graph [
   ]
   node [
     id 111
-    label "rise"
+    label "rose"
   ]
   node [
     id 112

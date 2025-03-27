@@ -307,7 +307,7 @@ graph [
   ]
   node [
     id 76
-    label "further"
+    label "far"
   ]
   node [
     id 77

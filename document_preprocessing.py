@@ -1,43 +1,103 @@
 import re
 import spacy
+from dateutil import parser
 import pandas as pd
+from symspellpy import SymSpell
+from num2words import num2words
 from fastcoref import spacy_component
 from fastcoref import LingMessCoref
+from tqdm import tqdm
+import ray
 
+# Функции препроцессинга
+def correct_spelling(text, sym_spell):
+    words = text.split()
+    corrected_words = [
+        sym_spell.lookup(word, verbosity=0)[0].term if sym_spell.lookup(word, verbosity=0) else word
+        for word in words
+    ]
+    return " ".join(corrected_words)
 
-def clean_header(text):
-    text = re.sub(r"(From:\s+[^\n]+\n)", "", text)
-    text = re.sub(r"(Subject:[^\n]+\n)", "", text)
-    text = re.sub(r"(([\sA-Za-z0-9\-]+)?[A|a]rchive-name:[^\n]+\n)", "", text)
-    text = re.sub(r"(Last-modified:[^\n]+\n)", "", text)
-    text = re.sub(r"(Version:[^\n]+\n)", "", text)
+def restore_punctuation(text, nlp):
+    doc = nlp(text)
+    return " ".join([sent.text.capitalize() for sent in doc.sents])
 
+def replace_number(match):
+    num = match.group(0)
+    try:
+        if re.match(r"\d{1,2}/\d{1,2}/\d{2,4}", num):
+            parsed_date = parser.parse(num)
+            return parsed_date.strftime("%B %d, %Y") if parsed_date else num
+        return num2words(int(num))
+    except ValueError:
+        return num
+
+def process_numbers(text):
+    return re.sub(r"\b\d+(\.\d+)?\b", replace_number, text)
+
+def adaptive_preprocessing(text):
+    text = re.sub(r"\[quote.*?\].*?\[/quote\]", "", text, flags=re.DOTALL)
+    text = re.sub(r"\b(USER|MODERATOR|ADMIN)\b:", "", text)
+    text = re.sub(r"(\d+mg|\d+ml|\d+g)", lambda m: f"{m.group(0)} (dosage)", text)
+    text = re.sub(r"(\d+ ?(tbsp|tsp|cup|g|kg|ml|l))", lambda m: f"{m.group(0)} (measurement)", text)
     return text
 
+# Определяем Ray-актора для обработки документов
+@ray.remote(num_gpus=0.1)  # Настройте выделение GPU по необходимости
+class SpacyWorker:
+    def __init__(self):
+        # Загружаем spaCy модель и настраиваем fastcoref
+        self.nlp = spacy.load("en_core_web_sm")
+        self.nlp.add_pipe('fastcoref', config={'device': 'cuda'})
+        # Загружаем словарь для коррекции орфографии
+        self.sym_spell = SymSpell(max_dictionary_edit_distance=2)
+        self.sym_spell.load_dictionary("frequency_dictionary_en.txt", term_index=0, count_index=1)
+    
+    def process(self, docs):
+        results = []
+        preprocessed_docs = []
+        # Предварительная обработка каждого документа
+        for doc in docs:
+            doc = restore_punctuation(doc, self.nlp)
+            doc = correct_spelling(doc, self.sym_spell)
+            doc = process_numbers(doc)
+            doc = adaptive_preprocessing(doc)
+            preprocessed_docs.append(doc)
+        # Пакетная обработка через spaCy pipe для быстроты
+        docs_processed = self.nlp.pipe(
+            preprocessed_docs,
+            component_cfg={'fastcoref': {'resolve_text': True}},
+            batch_size=256
+        )
+        for doc in docs_processed:
+            results.append(doc._.resolved_text)
+        return results
 
-def clean_document(document):
-    re_bad = r"(>\s*)+"
-    re_fullstop = r"(\.){2,}"
-    re_url = re.compile(r"(?:http|ftp|https):\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$")
-    re_email = re.compile("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")
-
-    document = document.strip()
-    document = re.sub(r"(\s+)", " ", document)
-    document = re.sub(re_bad, "", document)
-    document = re.sub(re_url, "", document)
-    document = re.sub(re_email, "", document)
-    document = re.sub(re_fullstop, "", document)
-
-    return document
-
-
-def preprocess_documents(dataset, raw_documents_csv_file_name, preprocessed_documents_csv_file_name):
-    nlp = spacy.load('en_core_web_sm')
-    nlp.add_pipe('fastcoref', config={'device': 'cuda'})
-
+def preprocess_documents(dataset, raw_documents_csv_file_name, preprocessed_documents_csv_file_name, num_workers=4, chunk_size=100):
     print(f"Preprocessing documents for the {dataset} dataset...")
-
     df = pd.read_csv(raw_documents_csv_file_name)
-    df['document'] = df['document'].apply(clean_document)
-    df['document'] = [document._.resolved_text for document in nlp.pipe(df['document'], component_cfg={'fastcoref': {'resolve_text': True}}, batch_size=256)]
+    docs = df['document'].tolist()
+    
+    # Разбиваем документы на чанки для распределения по акторам
+    chunks = [docs[i:i+chunk_size] for i in range(0, len(docs), chunk_size)]
+    
+    # Инициализируем Ray
+    ray.init(ignore_reinit_error=True)
+    workers = [SpacyWorker.remote() for _ in range(num_workers)]
+    
+    futures = []
+    for i, chunk in enumerate(chunks):
+        worker = workers[i % num_workers]
+        futures.append(worker.process.remote(chunk))
+    
+    results = []
+    # Единый прогресс-бар по всем чанкам
+    for future in tqdm(ray.get(futures), total=len(futures), desc="Processing documents"):
+        results.extend(future)
+    
+    # Обновляем DataFrame и сохраняем результаты
+    df['document'] = results
     df.to_csv(preprocessed_documents_csv_file_name, index=False)
+    
+    # Завершаем работу Ray
+    ray.shutdown()

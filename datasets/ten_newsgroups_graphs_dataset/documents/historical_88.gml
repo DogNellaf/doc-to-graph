@@ -979,7 +979,7 @@ graph [
   ]
   node [
     id 244
-    label "bear"
+    label "bore"
   ]
   node [
     id 245

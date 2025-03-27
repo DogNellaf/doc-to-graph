@@ -35,7 +35,7 @@ graph [
   ]
   node [
     id 8
-    label "data"
+    label "datum"
   ]
   node [
     id 9

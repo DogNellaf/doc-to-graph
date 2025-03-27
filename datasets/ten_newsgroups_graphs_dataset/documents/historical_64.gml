@@ -979,7 +979,7 @@ graph [
   ]
   node [
     id 244
-    label "further"
+    label "far"
   ]
   node [
     id 245

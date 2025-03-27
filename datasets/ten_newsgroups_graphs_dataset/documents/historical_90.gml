@@ -1387,7 +1387,7 @@ graph [
   ]
   node [
     id 346
-    label "logistic"
+    label "logistics"
   ]
   node [
     id 347

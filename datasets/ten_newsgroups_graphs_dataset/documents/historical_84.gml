@@ -635,7 +635,7 @@ graph [
   ]
   node [
     id 158
-    label "logistic"
+    label "logistics"
   ]
   node [
     id 159

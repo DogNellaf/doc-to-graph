@@ -447,7 +447,7 @@ graph [
   ]
   node [
     id 111
-    label "graphic"
+    label "graphics"
   ]
   node [
     id 112

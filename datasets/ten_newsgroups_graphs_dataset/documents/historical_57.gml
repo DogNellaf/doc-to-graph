@@ -1919,7 +1919,7 @@ graph [
   ]
   node [
     id 479
-    label "corp"
+    label "corps"
   ]
   node [
     id 480
@@ -2171,7 +2171,7 @@ graph [
   ]
   node [
     id 542
-    label "barb"
+    label "barbed"
   ]
   node [
     id 543

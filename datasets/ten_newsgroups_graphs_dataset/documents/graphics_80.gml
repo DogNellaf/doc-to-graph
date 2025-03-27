@@ -235,7 +235,7 @@ graph [
   ]
   node [
     id 58
-    label "headquarters"
+    label "headquarter"
   ]
   node [
     id 59

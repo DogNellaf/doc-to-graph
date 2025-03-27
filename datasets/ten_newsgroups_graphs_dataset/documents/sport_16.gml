@@ -67,7 +67,7 @@ graph [
   ]
   node [
     id 16
-    label "athletics"
+    label "athletic"
   ]
   node [
     id 17
@@ -403,58 +403,62 @@ graph [
   ]
   node [
     id 100
-    label "federation"
+    label "athletics"
   ]
   node [
     id 101
-    label "ban-01"
+    label "federation"
   ]
   node [
     id 102
-    label "end-01"
+    label "ban-01"
   ]
   node [
     id 103
-    label "2"
+    label "end-01"
   ]
   node [
     id 104
-    label "obvious-01"
+    label "2"
   ]
   node [
     id 105
-    label "state-01"
+    label "obvious-01"
   ]
   node [
     id 106
-    label "win-01"
+    label "state-01"
   ]
   node [
     id 107
-    label "distance-quantity"
+    label "win-01"
   ]
   node [
     id 108
-    label "gold"
+    label "distance-quantity"
   ]
   node [
     id 109
-    label "sydney"
+    label "gold"
   ]
   node [
     id 110
-    label "200"
+    label "sydney"
   ]
   node [
     id 111
-    label "meter"
+    label "200"
   ]
   node [
     id 112
-    label "100"
+    label "meter"
   ]
   node [
     id 113
+    label "100"
+  ]
+  node [
+    id 114
     label "2000"
   ]
   edge [
@@ -621,19 +625,19 @@ graph [
   ]
   edge [
     source 4
-    target 16
+    target 100
     key 0
     label ":op2"
   ]
   edge [
     source 4
-    target 100
+    target 101
     key 0
     label ":op3"
   ]
   edge [
     source 4
-    target 109
+    target 110
     key 0
     label ":op1"
   ]
@@ -861,13 +865,13 @@ graph [
   ]
   edge [
     source 27
-    target 103
+    target 104
     key 0
     label ":month"
   ]
   edge [
     source 27
-    target 113
+    target 114
     key 0
     label ":year"
   ]
@@ -915,7 +919,7 @@ graph [
   ]
   edge [
     source 34
-    target 105
+    target 106
     key 0
     label ":ARG0"
   ]
@@ -981,7 +985,7 @@ graph [
   ]
   edge [
     source 37
-    target 102
+    target 103
     key 0
     label ":op1"
   ]
@@ -1191,19 +1195,19 @@ graph [
   ]
   edge [
     source 63
-    target 106
+    target 107
     key 0
     label ":ARG1"
   ]
   edge [
     source 63
-    target 106
+    target 107
     key 1
     label ":ARG2"
   ]
   edge [
     source 63
-    target 107
+    target 108
     key 0
     label ":ARG2"
   ]
@@ -1473,7 +1477,7 @@ graph [
   ]
   edge [
     source 91
-    target 101
+    target 102
     key 0
     label ":ARG1"
   ]
@@ -1514,74 +1518,74 @@ graph [
     label ":poss"
   ]
   edge [
-    source 101
+    source 102
     target 26
     key 0
     label ":mod"
   ]
   edge [
-    source 102
+    source 103
     target 27
     key 0
     label ":ARG1"
   ]
   edge [
-    source 104
+    source 105
     target 41
     key 0
     label ":ARG1"
   ]
   edge [
-    source 105
+    source 106
     target 97
     key 0
     label ":ARG0"
   ]
   edge [
-    source 105
+    source 106
     target 37
     key 0
     label ":time"
   ]
   edge [
-    source 106
+    source 107
     target 2
     key 0
     label ":ARG0"
   ]
   edge [
-    source 106
-    target 108
+    source 107
+    target 109
     key 0
     label ":ARG1"
   ]
   edge [
-    source 106
+    source 107
     target 39
     key 0
     label ":ARG2"
   ]
   edge [
-    source 107
-    target 110
-    key 0
-    label ":quant"
-  ]
-  edge [
-    source 107
+    source 108
     target 111
-    key 0
-    label ":unit"
-  ]
-  edge [
-    source 107
-    target 112
     key 0
     label ":quant"
   ]
   edge [
     source 108
-    target 107
+    target 112
+    key 0
+    label ":unit"
+  ]
+  edge [
+    source 108
+    target 113
+    key 0
+    label ":quant"
+  ]
+  edge [
+    source 109
+    target 108
     key 0
     label ":mod"
   ]

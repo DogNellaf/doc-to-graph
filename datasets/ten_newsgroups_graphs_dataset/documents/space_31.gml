@@ -259,7 +259,7 @@ graph [
   ]
   node [
     id 64
-    label "physics"
+    label "physic"
   ]
   node [
     id 65

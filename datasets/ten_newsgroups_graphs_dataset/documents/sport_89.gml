@@ -415,7 +415,7 @@ graph [
   ]
   node [
     id 103
-    label "athletics"
+    label "athletic"
   ]
   node [
     id 104

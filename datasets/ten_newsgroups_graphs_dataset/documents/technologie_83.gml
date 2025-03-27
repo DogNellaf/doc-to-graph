@@ -451,7 +451,7 @@ graph [
   ]
   node [
     id 112
-    label "medium"
+    label "media"
   ]
   node [
     id 113

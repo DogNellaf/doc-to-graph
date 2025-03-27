@@ -159,7 +159,7 @@ graph [
   ]
   node [
     id 39
-    label "physics"
+    label "physic"
   ]
   node [
     id 40

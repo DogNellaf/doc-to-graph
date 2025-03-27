@@ -403,7 +403,7 @@ graph [
   ]
   node [
     id 100
-    label "data"
+    label "datum"
   ]
   node [
     id 101
@@ -947,7 +947,7 @@ graph [
   ]
   node [
     id 236
-    label "regiman"
+    label "regimen"
   ]
   node [
     id 237

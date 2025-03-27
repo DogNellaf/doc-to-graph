@@ -83,7 +83,7 @@ graph [
   ]
   node [
     id 20
-    label "athletics"
+    label "athletic"
   ]
   node [
     id 21

@@ -147,7 +147,7 @@ graph [
   ]
   node [
     id 36
-    label "bio"
+    label "bios"
   ]
   node [
     id 37

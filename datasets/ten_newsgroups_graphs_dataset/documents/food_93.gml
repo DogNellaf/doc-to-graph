@@ -251,7 +251,7 @@ graph [
   ]
   node [
     id 62
-    label "diabetes"
+    label "diabete"
   ]
   node [
     id 63

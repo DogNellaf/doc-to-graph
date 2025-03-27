@@ -1219,7 +1219,7 @@ graph [
   ]
   node [
     id 304
-    label "economic"
+    label "economics"
   ]
   node [
     id 305

@@ -223,7 +223,7 @@ graph [
   ]
   node [
     id 55
-    label "further"
+    label "far"
   ]
   node [
     id 56
@@ -264,6 +264,142 @@ graph [
   node [
     id 65
     label "low-04"
+  ]
+  node [
+    id 66
+    label "contribute-01"
+  ]
+  node [
+    id 67
+    label "isolate"
+  ]
+  node [
+    id 68
+    label "produce-01"
+  ]
+  node [
+    id 69
+    label "serotonin"
+  ]
+  node [
+    id 70
+    label "cause-01"
+  ]
+  node [
+    id 71
+    label "ward-off-01"
+  ]
+  node [
+    id 72
+    label "improve-01"
+  ]
+  node [
+    id 73
+    label "depress-01"
+  ]
+  node [
+    id 74
+    label "mood"
+  ]
+  node [
+    id 75
+    label "trigger-01"
+  ]
+  node [
+    id 76
+    label "headache"
+  ]
+  node [
+    id 77
+    label "variety"
+  ]
+  node [
+    id 78
+    label "citrus"
+  ]
+  node [
+    id 79
+    label "certain"
+  ]
+  node [
+    id 80
+    label "except-01"
+  ]
+  node [
+    id 81
+    label "buster-01"
+  ]
+  node [
+    id 82
+    label "lose-02"
+  ]
+  node [
+    id 83
+    label "potential"
+  ]
+  node [
+    id 84
+    label "weight"
+  ]
+  node [
+    id 85
+    label "person"
+  ]
+  node [
+    id 86
+    label "sensitive-03"
+  ]
+  node [
+    id 87
+    label "take-01"
+  ]
+  node [
+    id 88
+    label "note-01"
+  ]
+  node [
+    id 89
+    label "suffer-01"
+  ]
+  node [
+    id 90
+    label "irritable"
+  ]
+  node [
+    id 91
+    label "bowel"
+  ]
+  node [
+    id 92
+    label "syndrome"
+  ]
+  node [
+    id 93
+    label "experience-01"
+  ]
+  node [
+    id 94
+    label "source-02"
+  ]
+  node [
+    id 95
+    label "sugar"
+  ]
+  node [
+    id 96
+    label "concentrate-02"
+  ]
+  node [
+    id 97
+    label "fruit"
+  ]
+  node [
+    id 98
+    label "discomfort"
+  ]
+  node [
+    id 99
+    label "after"
   ]
   edge [
     source 0
@@ -332,6 +468,30 @@ graph [
     label ":op1"
   ]
   edge [
+    source 4
+    target 69
+    key 0
+    label ":op1"
+  ]
+  edge [
+    source 4
+    target 90
+    key 0
+    label ":op1"
+  ]
+  edge [
+    source 4
+    target 91
+    key 0
+    label ":op2"
+  ]
+  edge [
+    source 4
+    target 92
+    key 0
+    label ":op3"
+  ]
+  edge [
     source 7
     target 1
     key 0
@@ -348,6 +508,24 @@ graph [
     target 63
     key 0
     label ":mod"
+  ]
+  edge [
+    source 7
+    target 77
+    key 0
+    label ":mod"
+  ]
+  edge [
+    source 7
+    target 78
+    key 0
+    label ":mod"
+  ]
+  edge [
+    source 7
+    target 97
+    key 0
+    label ":source"
   ]
   edge [
     source 9
@@ -446,6 +624,12 @@ graph [
     label ":ARG0"
   ]
   edge [
+    source 11
+    target 67
+    key 0
+    label ":ARG0"
+  ]
+  edge [
     source 12
     target 13
     key 0
@@ -536,6 +720,30 @@ graph [
     label ":op3"
   ]
   edge [
+    source 13
+    target 71
+    key 0
+    label ":op1"
+  ]
+  edge [
+    source 13
+    target 72
+    key 0
+    label ":op2"
+  ]
+  edge [
+    source 13
+    target 86
+    key 0
+    label ":op1"
+  ]
+  edge [
+    source 13
+    target 93
+    key 0
+    label ":op2"
+  ]
+  edge [
     source 14
     target 2
     key 0
@@ -556,6 +764,18 @@ graph [
   edge [
     source 16
     target 1
+    key 0
+    label ":ARG1"
+  ]
+  edge [
+    source 16
+    target 85
+    key 0
+    label ":ARG0"
+  ]
+  edge [
+    source 16
+    target 94
     key 0
     label ":ARG1"
   ]
@@ -688,6 +908,12 @@ graph [
   edge [
     source 30
     target 41
+    key 0
+    label ":ARG1"
+  ]
+  edge [
+    source 30
+    target 75
     key 0
     label ":ARG1"
   ]
@@ -878,6 +1104,18 @@ graph [
     label ":ARG2"
   ]
   edge [
+    source 60
+    target 7
+    key 0
+    label ":ARG1"
+  ]
+  edge [
+    source 60
+    target 7
+    key 1
+    label ":ARG2"
+  ]
+  edge [
     source 61
     target 9
     key 0
@@ -912,5 +1150,221 @@ graph [
     target 64
     key 0
     label ":ARG1"
+  ]
+  edge [
+    source 66
+    target 67
+    key 0
+    label ":ARG0"
+  ]
+  edge [
+    source 66
+    target 68
+    key 0
+    label ":ARG2"
+  ]
+  edge [
+    source 66
+    target 26
+    key 0
+    label ":mod"
+  ]
+  edge [
+    source 68
+    target 1
+    key 0
+    label ":ARG1"
+  ]
+  edge [
+    source 70
+    target 66
+    key 0
+    label ":ARG0"
+  ]
+  edge [
+    source 70
+    target 30
+    key 0
+    label ":ARG1"
+  ]
+  edge [
+    source 71
+    target 67
+    key 0
+    label ":ARG0"
+  ]
+  edge [
+    source 71
+    target 73
+    key 0
+    label ":ARG1"
+  ]
+  edge [
+    source 72
+    target 67
+    key 0
+    label ":ARG0"
+  ]
+  edge [
+    source 72
+    target 74
+    key 0
+    label ":ARG1"
+  ]
+  edge [
+    source 75
+    target 7
+    key 0
+    label ":ARG0"
+  ]
+  edge [
+    source 75
+    target 76
+    key 0
+    label ":ARG1"
+  ]
+  edge [
+    source 76
+    target 85
+    key 0
+    label ":location"
+  ]
+  edge [
+    source 77
+    target 79
+    key 0
+    label ":mod"
+  ]
+  edge [
+    source 80
+    target 7
+    key 0
+    label ":ARG2"
+  ]
+  edge [
+    source 80
+    target 81
+    key 0
+    label ":ARG1"
+  ]
+  edge [
+    source 81
+    target 7
+    key 0
+    label ":ARG0"
+  ]
+  edge [
+    source 81
+    target 82
+    key 0
+    label ":ARG1"
+  ]
+  edge [
+    source 81
+    target 83
+    key 0
+    label ":mod"
+  ]
+  edge [
+    source 82
+    target 84
+    key 0
+    label ":ARG1"
+  ]
+  edge [
+    source 86
+    target 85
+    key 0
+    label ":ARG0"
+  ]
+  edge [
+    source 86
+    target 85
+    key 1
+    label ":ARG1"
+  ]
+  edge [
+    source 86
+    target 94
+    key 0
+    label ":ARG0"
+  ]
+  edge [
+    source 87
+    target 85
+    key 0
+    label ":ARG0"
+  ]
+  edge [
+    source 87
+    target 88
+    key 0
+    label ":ARG1"
+  ]
+  edge [
+    source 88
+    target 85
+    key 0
+    label ":ARG0"
+  ]
+  edge [
+    source 88
+    target 13
+    key 0
+    label ":ARG1"
+  ]
+  edge [
+    source 89
+    target 85
+    key 0
+    label ":ARG0"
+  ]
+  edge [
+    source 89
+    target 48
+    key 0
+    label ":ARG1"
+  ]
+  edge [
+    source 93
+    target 85
+    key 0
+    label ":ARG0"
+  ]
+  edge [
+    source 93
+    target 98
+    key 0
+    label ":ARG1"
+  ]
+  edge [
+    source 93
+    target 99
+    key 0
+    label ":time"
+  ]
+  edge [
+    source 94
+    target 95
+    key 0
+    label ":ARG1"
+  ]
+  edge [
+    source 95
+    target 7
+    key 0
+    label ":example"
+  ]
+  edge [
+    source 96
+    target 95
+    key 0
+    label ":ARG1"
+  ]
+  edge [
+    source 99
+    target 16
+    key 0
+    label ":op1"
   ]
 ]

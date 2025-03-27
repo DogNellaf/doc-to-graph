@@ -51,7 +51,7 @@ graph [
   ]
   node [
     id 12
-    label "data"
+    label "datum"
   ]
   node [
     id 13
@@ -559,7 +559,7 @@ graph [
   ]
   node [
     id 139
-    label "further"
+    label "far"
   ]
   node [
     id 140

@@ -67,7 +67,7 @@ graph [
   ]
   node [
     id 16
-    label "politics"
+    label "politic"
   ]
   node [
     id 17

@@ -251,7 +251,7 @@ graph [
   ]
   node [
     id 62
-    label "politics"
+    label "politic"
   ]
   node [
     id 63

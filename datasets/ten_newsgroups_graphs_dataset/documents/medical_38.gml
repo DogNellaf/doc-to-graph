@@ -23,7 +23,7 @@ graph [
   ]
   node [
     id 5
-    label "pediatric"
+    label "pediatrics"
   ]
   node [
     id 6

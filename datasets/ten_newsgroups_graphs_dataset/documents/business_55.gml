@@ -587,7 +587,7 @@ graph [
   ]
   node [
     id 146
-    label "further"
+    label "far"
   ]
   node [
     id 147

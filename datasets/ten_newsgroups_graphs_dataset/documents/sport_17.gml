@@ -567,10 +567,14 @@ graph [
   ]
   node [
     id 141
-    label "lead-02"
+    label "secs"
   ]
   node [
     id 142
+    label "lead-02"
+  ]
+  node [
+    id 143
     label "season"
   ]
   edge [
@@ -1919,19 +1923,19 @@ graph [
   ]
   edge [
     source 139
-    target 47
+    target 141
     key 0
     label ":unit"
   ]
   edge [
-    source 141
+    source 142
     target 16
     key 0
     label ":ARG0"
   ]
   edge [
-    source 141
-    target 142
+    source 142
+    target 143
     key 0
     label ":ARG2"
   ]

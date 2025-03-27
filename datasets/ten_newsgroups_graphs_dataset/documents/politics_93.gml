@@ -115,7 +115,7 @@ graph [
   ]
   node [
     id 28
-    label "politics"
+    label "politic"
   ]
   node [
     id 29

@@ -1719,7 +1719,7 @@ graph [
   ]
   node [
     id 429
-    label "drive"
+    label "drove"
   ]
   node [
     id 430

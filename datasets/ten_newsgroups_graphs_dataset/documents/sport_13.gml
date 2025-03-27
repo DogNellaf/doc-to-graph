@@ -831,7 +831,7 @@ graph [
   ]
   node [
     id 207
-    label "mean"
+    label "means"
   ]
   node [
     id 208

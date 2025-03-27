@@ -191,7 +191,7 @@ graph [
   ]
   node [
     id 47
-    label "pediatric"
+    label "pediatrics"
   ]
   node [
     id 48

@@ -715,7 +715,7 @@ graph [
   ]
   node [
     id 178
-    label "data"
+    label "datum"
   ]
   node [
     id 179
@@ -899,7 +899,7 @@ graph [
   ]
   node [
     id 224
-    label "medium"
+    label "media"
   ]
   node [
     id 225

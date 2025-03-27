@@ -23,7 +23,7 @@ graph [
   ]
   node [
     id 5
-    label "athletics"
+    label "athletic"
   ]
   node [
     id 6

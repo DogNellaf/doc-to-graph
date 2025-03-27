@@ -623,7 +623,7 @@ graph [
   ]
   node [
     id 155
-    label "build"
+    label "building"
   ]
   node [
     id 156

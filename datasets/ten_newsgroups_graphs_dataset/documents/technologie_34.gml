@@ -63,7 +63,7 @@ graph [
   ]
   node [
     id 15
-    label "ethic"
+    label "ethics"
   ]
   node [
     id 16
