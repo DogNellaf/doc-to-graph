@@ -60,7 +60,7 @@ class NLPProcessor:
             results.append(text)
 
         resolved_texts = []
-        inner_batch_size = 32  # Размер батча для spaCy
+        inner_batch_size = 8  # Размер батча для spaCy
         for i in range(0, len(results), inner_batch_size):
             batch = results[i:i + inner_batch_size]
             docs = self.nlp.pipe(batch, component_cfg={'fastcoref': {'resolve_text': True}})
