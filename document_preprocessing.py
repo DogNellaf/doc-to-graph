@@ -1,7 +1,7 @@
 import re
 import spacy
-import ray
 import gc
+import torch
 import pandas as pd
 from dateutil import parser
 from symspellpy import SymSpell
@@ -38,75 +38,67 @@ def adaptive_preprocessing(text):
     text = RE_MEASUREMENT.sub(lambda m: f"{m.group(0)} (measurement)", text)
     return text
 
-# Глобальный актёр, который загружается один раз
-@ray.remote(num_gpus=1)  # Используем 1 GPU
 class NLPProcessor:
     def __init__(self):
         print("Загрузка NLP-моделей и инструментов...")
-        self.nlp = spacy.load("en_core_web_sm")  # Используем модель на GPU
-        self.nlp.add_pipe('fastcoref', config={'device': 'cuda'})  # GPU-обработка coref
+        self.nlp = spacy.load("en_core_web_sm")
+        # Добавляем компонент для разрешения кореференций с использованием GPU
+        self.nlp.add_pipe('fastcoref', config={'device': 'cuda'})
         self.sym_spell = SymSpell(max_dictionary_edit_distance=2)
         self.sym_spell.load_dictionary("frequency_dictionary_en.txt", term_index=0, count_index=1)
-        self.spell_cache = {}
-
+    
     def correct_spelling(self, text):
-        words = text.split()
-        corrected_words = []
-        for word in words:
-            if word in self.spell_cache:
-                corrected_words.append(self.spell_cache[word])
-            else:
-                lookup = self.sym_spell.lookup(word, verbosity=0)
-                corrected = lookup[0].term if lookup else word
-                self.spell_cache[word] = corrected
-                corrected_words.append(corrected)
-        return " ".join(corrected_words)
-
-    def restore_punctuation(self, text):
-        doc = self.nlp(text)
-        return " ".join([sent.text.capitalize() for sent in doc.sents])
+        # Здесь можно реализовать корректировку орфографии с использованием sym_spell, если это требуется.
+        # Например:
+        # corrected = self.sym_spell.lookup(text, verbosity=2)
+        # return corrected[0].term if corrected else text
+        return text
 
     def process(self, texts):
         results = []
         for text in texts:
-            text = self.restore_punctuation(text)
             text = self.correct_spelling(text)
             text = process_numbers(text)
             text = adaptive_preprocessing(text)
             results.append(text)
-        
-        docs = self.nlp.pipe(
-            results, 
-            component_cfg={'fastcoref': {'resolve_text': True}}
-        )
-        
-        return [doc._.resolved_text for doc in docs]
 
-# Функция обработки данных
+        resolved_texts = []
+        inner_batch_size = 4  # Размер батча для обработки через spaCy (для избежания OOM)
+        for i in range(0, len(results), inner_batch_size):
+            batch = results[i:i + inner_batch_size]
+            docs = self.nlp.pipe(batch, component_cfg={'fastcoref': {'resolve_text': True}})
+            resolved_texts.extend([doc._.resolved_text for doc in docs])
+            # Очистка GPU-памяти после каждого батча
+            torch.cuda.empty_cache()
+
+        # Принудительно освобождаем память модели
+        del self.nlp
+        torch.cuda.empty_cache()
+
+        return resolved_texts
+
 def preprocess_documents(dataset, input_csv, output_csv, batch_size=32):
     print(f"Загрузка данных {dataset}...")
     df = pd.read_csv(input_csv)
     docs = df['document'].tolist()
 
-    print("Запуск глобального NLP-актора...")
-    processor = NLPProcessor.remote()  # Создаём один процессор
+    processor = NLPProcessor()
 
     results = []
-    chunk_size = batch_size  # Используем batch_size как размер чанка
-    chunks = [docs[i:i+chunk_size] for i in range(0, len(docs), chunk_size)]
+    # Разбиваем документы на чанки (batch processing)
+    chunks = [docs[i:i + batch_size] for i in range(0, len(docs), batch_size)]
 
     print("Начало обработки...")
-    futures = [processor.process.remote(chunk) for chunk in chunks]
-    
-    pbar = tqdm(total=len(futures), desc="Processing batches")
-    for future in ray.get(futures):
-        results.extend(future)
+    pbar = tqdm(total=len(chunks), desc="Processing batches")
+    for chunk in chunks:
+        processed_chunk = processor.process(chunk)
+        results.extend(processed_chunk)
         pbar.update(1)
     pbar.close()
 
     df['document'] = results
     df.to_csv(output_csv, index=False)
-    
+
     print("Очистка памяти...")
-    del processor  # Завершаем актёр
+    del processor
     gc.collect()
