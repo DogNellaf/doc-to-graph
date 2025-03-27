@@ -6,10 +6,9 @@ import shutil
 import penman
 import pandas as pd
 import networkx as nx
+import os
 import ray
 from tqdm import tqdm
-
-# Функции, как в оригинальном коде
 
 def draw_graph(graph, graph_name):
     dot_graph = nx.nx_agraph.to_agraph(graph)
@@ -19,10 +18,17 @@ def draw_graph(graph, graph_name):
     return new_graph_name
 
 def save_graphs(graphs, graphs_dataset_file_name, mode):
+    dest_dir = os.path.join(graphs_dataset_file_name, mode)
+    os.makedirs(dest_dir, exist_ok=True)
+    
     for graph_name, graph in graphs.items():
-        nx.write_gml(graph, f"{graph_name}.gml")
-        path = f"{graphs_dataset_file_name}/{mode}/{graph_name}.gml"
-        shutil.move(f"{graph_name}.gml", path)
+        temp_file = f"{graph_name}.gml"
+        nx.write_gml(graph, temp_file)
+        dest_path = os.path.join(dest_dir, f"{graph_name}.gml")
+        try:
+            shutil.move(temp_file, dest_path)
+        except Exception as e:
+            print(f"Ошибка при перемещении файла {temp_file} в {dest_path}: {e}")
 
 def merge_graphs(sent_graphs):
     merged_graph = nx.MultiDiGraph()
@@ -63,7 +69,6 @@ def refine_graph(modified_graph, lemma_dict):
 def modify_graph(graph):
     modified_graph = nx.MultiDiGraph()
     instance_dict = {}
-    # Сортируем ребра так, чтобы сначала обрабатывались :instance
     graph_edges = sorted(graph.edges(data=True), key=lambda e: e[2]['label'] != ':instance')
     for node_1, node_2, data in graph_edges:
         if data['label']:
@@ -96,18 +101,17 @@ def modify_graph(graph):
         print("Modified graph isn't connected. Problematic.")
         return 0
 
-# Параллельная обработка на уровне документов
 @ray.remote
 class DocumentProcessor:
     def __init__(self):
         amrlib.setup_spacy_extension()
         self.nlp = spacy.load('en_core_web_sm')
+        self.lemma_dict = {}
     
     def process_document(self, document_index, document_text, document_frame, graphs_dataset_file_name, mode):
         sent_graphs = {}
         doc = self.nlp(document_text)
-        lemma_dict = {}
-        lemma_dict = lemmatize(doc, lemma_dict)
+        self.lemma_dict = lemmatize(doc, self.lemma_dict)
         try:
             amr_graphs = doc._.to_amr()
         except Exception as e:
@@ -139,7 +143,11 @@ class DocumentProcessor:
                 print(f"Modification error for sentence {sentence_index}")
                 continue
 
-            refined_graph = refine_graph(modified_graph, lemma_dict)
+            refined_graph = refine_graph(modified_graph, self.lemma_dict)
+            if refined_graph == 0:
+                print(f"Refinement error for sentence {sentence_index}")
+                continue
+
             sent_graphs[str(sentence_index)] = refined_graph
 
             if mode in ['all', 'sentences']:
@@ -172,7 +180,6 @@ def convert_documents(dataset, preprocessed_documents_csv_file_name, preprocesse
                                                 graphs_dataset_file_name, mode)
         )
 
-    # Используем tqdm для отображения прогресса выполнения
     start_time = time.time()
     pbar = tqdm(total=len(doc_tasks), desc="Processing documents", unit="doc")
     completed = 0

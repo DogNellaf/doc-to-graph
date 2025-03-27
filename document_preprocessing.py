@@ -1,112 +1,106 @@
-import os
 import re
 import spacy
-import gc
-import torch
 import pandas as pd
-from dateutil import parser
-from symspellpy import SymSpell
-from num2words import num2words
-from tqdm import tqdm
 from fastcoref import spacy_component
 from fastcoref import LingMessCoref
 
-os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
-# Компилируем регулярные выражения один раз
-RE_DATE = re.compile(r"\d{1,2}/\d{1,2}/\d{2,4}")
-RE_NUMBER = re.compile(r"\b\d+(\.\d+)?\b")
-RE_QUOTE = re.compile(r"\[quote.*?\].*?\[/quote\]", flags=re.DOTALL)
-RE_USER = re.compile(r"\b(USER|MODERATOR|ADMIN)\b:")
-RE_DOSAGE = re.compile(r"(\d+mg|\d+ml|\d+g)")
-RE_MEASUREMENT = re.compile(r"(\d+ ?(tbsp|tsp|cup|g|kg|ml|l))")
-
-# Функции препроцессинга
-def replace_number(match):
-    num = match.group(0)
-    try:
-        if RE_DATE.match(num):
-            return parser.parse(num).strftime("%B %d, %Y")
-        return num2words(int(num))
-    except ValueError:
-        return num
-
-def process_numbers(text):
-    return RE_NUMBER.sub(replace_number, text)
-
-def adaptive_preprocessing(text):
-    text = RE_QUOTE.sub("", text)
-    text = RE_USER.sub("", text)
-    text = RE_DOSAGE.sub(lambda m: f"{m.group(0)} (dosage)", text)
-    text = RE_MEASUREMENT.sub(lambda m: f"{m.group(0)} (measurement)", text)
+def clean_header(text):
+    text = re.sub(r"(From:\s+[^\n]+\n)", "", text)
+    text = re.sub(r"(Subject:[^\n]+\n)", "", text)
+    text = re.sub(r"(([\sA-Za-z0-9\-]+)?[A|a]rchive-name:[^\n]+\n)", "", text)
+    text = re.sub(r"(Last-modified:[^\n]+\n)", "", text)
+    text = re.sub(r"(Version:[^\n]+\n)", "", text)
     return text
 
-class NLPProcessor:
-    def __init__(self):
-        print("Загрузка NLP-моделей и инструментов...")
-        self.nlp = spacy.load("en_core_web_sm")
-        # Добавляем компонент для разрешения кореференций с использованием GPU
-        self.nlp.add_pipe('fastcoref', config={'device': 'cuda'})
-        self.sym_spell = SymSpell(max_dictionary_edit_distance=2)
-        self.sym_spell.load_dictionary("frequency_dictionary_en.txt", term_index=0, count_index=1)
-    
-    def correct_spelling(self, text):
-        # Реализуйте корректировку орфографии при необходимости
-        return text
 
-    def process(self, texts):
-        results = []
-        for text in texts:
-            text = self.correct_spelling(text)
-            text = process_numbers(text)
-            text = adaptive_preprocessing(text)
-            results.append(text)
+def robust_sentence_segmentation(text, nlp):
+    doc = nlp(text)
+    sentences = []
+    for sent in doc.sents:
+        s = sent.text.strip()
+        if s and s[-1] not in ".!?":
+            s += "."
+        sentences.append(s)
+    return " ".join(sentences)
 
-        resolved_texts = []
-        inner_batch_size = 1  # Используем минимальный размер батча для spaCy
-        for i in range(0, len(results), inner_batch_size):
-            batch = results[i:i + inner_batch_size]
-            with torch.no_grad():  # Отключаем вычисление градиентов
-                docs = list(self.nlp.pipe(
-                    batch, 
-                    component_cfg={'fastcoref': {'resolve_text': True}}
-                ))
-            resolved_texts.extend([doc._.resolved_text for doc in docs])
-            
-            # Явно удаляем переменные и очищаем память
-            del docs, batch
-            torch.cuda.empty_cache()
-            gc.collect()
-            
-        return resolved_texts
 
-    def cleanup(self):
-        # Метод для явного освобождения ресурсов, если он требуется
-        del self.nlp
-        torch.cuda.empty_cache()
-        gc.collect()
+def correct_linguistic_errors(text):
+    sentences = re.split(r'(?<=[.!?])\s+', text)
+    corrected_sentences = []
+    for sentence in sentences:
+        sentence = sentence.strip()
+        if not sentence:
+            continue
 
-def preprocess_documents(dataset, input_csv, output_csv, batch_size=32):
-    print(f"Загрузка данных {dataset}...")
-    df = pd.read_csv(input_csv)
-    docs = df['document'].tolist()
+        sentence = sentence[0].upper() + sentence[1:]
 
-    processor = NLPProcessor()
+        if sentence[-1] not in ".!?":
+            sentence += "."
+        corrected_sentences.append(sentence)
+    return " ".join(corrected_sentences)
 
-    results = []
-    # Разбиваем документы на чанки (batch processing)
-    chunks = [docs[i:i + batch_size] for i in range(0, len(docs), batch_size)]
 
-    print("Начало обработки...")
-    pbar = tqdm(total=len(chunks), desc="Processing batches")
-    for chunk in chunks:
-        processed_chunk = processor.process(chunk)
-        results.extend(processed_chunk)
-        pbar.update(1)
-    pbar.close()
+def normalize_numerical_data(text):
+    text = re.sub(
+        r'\b(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})\b',
+        lambda m: f"{m.group(3)}-{int(m.group(2)):02d}-{int(m.group(1)):02d}",
+        text
+    )
 
-    df['document'] = results
-    df.to_csv(output_csv, index=False)
+    text = re.sub(r'(\d+)\s*(mg|ml|g|kg)', r'\1\2', text)
+    return text
 
-    print("Очистка памяти...")
-    processor.cleanup()
+
+def clean_document(document, document_type="generic", nlp=None):
+    document = document.strip()
+    document = re.sub(r"(\s+)", " ", document)
+    document = clean_header(document)
+
+    re_bad = r"(>\s*)+"
+    re_fullstop = r"(\.){2,}"
+    re_url = re.compile(
+        r"(?:http|ftp|https):\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)"
+    )
+    re_email = re.compile(
+        r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@"
+        r"(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\["
+        r"(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}"
+        r"(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|"
+        r"[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]"
+        r"|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)])"
+    )
+
+    document = re.sub(re_bad, "", document)
+    document = re.sub(re_url, "", document)
+    document = re.sub(re_email, "", document)
+    document = re.sub(re_fullstop, ".", document)
+
+    if nlp is None:
+        nlp = spacy.load('en_core_web_sm')
+
+    if document_type in ["forum", "medical", "recipe"]:
+        document = normalize_numerical_data(document)
+        document = robust_sentence_segmentation(document, nlp)
+    else:
+        document = normalize_numerical_data(document)
+        document = robust_sentence_segmentation(document, nlp)
+
+    document = correct_linguistic_errors(document)
+    return document
+
+
+def preprocess_documents(dataset, raw_documents_csv_file_name, preprocessed_documents_csv_file_name, document_type="generic"):
+    nlp = spacy.load('en_core_web_sm')
+    nlp.add_pipe('fastcoref', config={'device': 'cuda'})
+
+    print(f"Preprocessing documents for the {dataset} dataset...")
+
+    df = pd.read_csv(raw_documents_csv_file_name)
+    df['document'] = df['document'].apply(lambda doc: clean_document(doc, document_type, nlp))
+    df['document'] = [document._.resolved_text for document in nlp.pipe(
+        df['document'],
+        component_cfg={'fastcoref': {'resolve_text': True}},
+        batch_size=256
+    )]
+    df.to_csv(preprocessed_documents_csv_file_name, index=False)
