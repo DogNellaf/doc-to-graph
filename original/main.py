@@ -1,4 +1,5 @@
 import yaml
+import time
 from pathlib import Path
 from utils import get_project_root
 from file_renaming import parse_directories
@@ -35,6 +36,8 @@ if __name__ == '__main__':
     operation = args.operation
     mode = args.mode
 
+    start = time.time()
+
     if args.dataset == 'ten_newsgroups':
         dataset = 'ten_newsgroups'
         classes = config['ten_newsgroups_classes']
@@ -56,3 +59,7 @@ if __name__ == '__main__':
 
     elif operation == 'document_graph_conversion':
         convert_documents(dataset, preprocessed_documents_csv_file_name, preprocessed_sentences_csv_file_name, graphs_dataset_file_name, mode)
+
+    end = time.time()
+
+    print("Execution time:", end - start)
