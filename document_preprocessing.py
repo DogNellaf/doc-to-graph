@@ -44,7 +44,7 @@ def adaptive_preprocessing(text):
     return text
 
 # Определяем Ray-актора для обработки документов
-@ray.remote
+@ray.remote(num_gpus=0.1)  # Настройте выделение GPU по необходимости
 class SpacyWorker:
     def __init__(self):
         # Загружаем spaCy модель и настраиваем fastcoref
