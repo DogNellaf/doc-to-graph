@@ -1,3 +1,4 @@
+import os
 import re
 import spacy
 import gc
@@ -9,6 +10,8 @@ from num2words import num2words
 from tqdm import tqdm
 from fastcoref import spacy_component
 from fastcoref import LingMessCoref
+
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
 # Компилируем регулярные выражения один раз
 RE_DATE = re.compile(r"\d{1,2}/\d{1,2}/\d{2,4}")
