@@ -8,6 +8,7 @@ from fastcoref import spacy_component
 from fastcoref import LingMessCoref
 from tqdm import tqdm
 import ray
+import gc  # для явного вызова сборщика мусора
 
 # Функции препроцессинга
 def correct_spelling(text, sym_spell):
@@ -43,17 +44,18 @@ def adaptive_preprocessing(text):
     return text
 
 # Определяем Ray-актора для обработки документов
-@ray.remote(num_gpus=0.1)  # Настройте выделение GPU по необходимости
+@ray.remote
 class SpacyWorker:
     def __init__(self):
         # Загружаем spaCy модель и настраиваем fastcoref
         self.nlp = spacy.load("en_core_web_sm")
-        self.nlp.add_pipe('fastcoref', config={'device': 'cuda'})
+        # При необходимости, переключите fastcoref на CPU для экономии GPU-памяти:
+        self.nlp.add_pipe('fastcoref', config={'device': 'cpu'})  # или 'cuda', если память позволяет
         # Загружаем словарь для коррекции орфографии
         self.sym_spell = SymSpell(max_dictionary_edit_distance=2)
         self.sym_spell.load_dictionary("frequency_dictionary_en.txt", term_index=0, count_index=1)
     
-    def process(self, docs):
+    def process(self, docs, batch_size=32):
         results = []
         preprocessed_docs = []
         # Предварительная обработка каждого документа
@@ -63,17 +65,19 @@ class SpacyWorker:
             doc = process_numbers(doc)
             doc = adaptive_preprocessing(doc)
             preprocessed_docs.append(doc)
-        # Пакетная обработка через spaCy pipe для быстроты
+        # Обработка чанка через spaCy pipe с уменьшенным batch_size
         docs_processed = self.nlp.pipe(
             preprocessed_docs,
             component_cfg={'fastcoref': {'resolve_text': True}},
-            batch_size=256
+            batch_size=batch_size
         )
         for doc in docs_processed:
             results.append(doc._.resolved_text)
+        # Явное освобождение памяти (если требуется)
+        gc.collect()
         return results
 
-def preprocess_documents(dataset, raw_documents_csv_file_name, preprocessed_documents_csv_file_name, num_workers=4, chunk_size=100):
+def preprocess_documents(dataset, raw_documents_csv_file_name, preprocessed_documents_csv_file_name, num_workers=1, chunk_size=50):
     print(f"Preprocessing documents for the {dataset} dataset...")
     df = pd.read_csv(raw_documents_csv_file_name)
     docs = df['document'].tolist()
@@ -81,8 +85,7 @@ def preprocess_documents(dataset, raw_documents_csv_file_name, preprocessed_docu
     # Разбиваем документы на чанки для распределения по акторам
     chunks = [docs[i:i+chunk_size] for i in range(0, len(docs), chunk_size)]
     
-    # Инициализируем Ray
-    ray.init(ignore_reinit_error=True)
+    # Используем меньшее число акторов для экономии памяти
     workers = [SpacyWorker.remote() for _ in range(num_workers)]
     
     futures = []
@@ -99,5 +102,3 @@ def preprocess_documents(dataset, raw_documents_csv_file_name, preprocessed_docu
     df['document'] = results
     df.to_csv(preprocessed_documents_csv_file_name, index=False)
     
-    # Завершаем работу Ray
-    ray.shutdown()
