@@ -48,10 +48,7 @@ class NLPProcessor:
         self.sym_spell.load_dictionary("frequency_dictionary_en.txt", term_index=0, count_index=1)
     
     def correct_spelling(self, text):
-        # Здесь можно реализовать корректировку орфографии с использованием sym_spell, если это требуется.
-        # Например:
-        # corrected = self.sym_spell.lookup(text, verbosity=2)
-        # return corrected[0].term if corrected else text
+        # Реализуйте корректировку орфографии при необходимости
         return text
 
     def process(self, texts):
@@ -63,7 +60,7 @@ class NLPProcessor:
             results.append(text)
 
         resolved_texts = []
-        inner_batch_size = 4  # Размер батча для обработки через spaCy (для избежания OOM)
+        inner_batch_size = 32  # Размер батча для spaCy
         for i in range(0, len(results), inner_batch_size):
             batch = results[i:i + inner_batch_size]
             docs = self.nlp.pipe(batch, component_cfg={'fastcoref': {'resolve_text': True}})
@@ -71,11 +68,13 @@ class NLPProcessor:
             # Очистка GPU-памяти после каждого батча
             torch.cuda.empty_cache()
 
-        # Принудительно освобождаем память модели
+        return resolved_texts
+
+    def cleanup(self):
+        # Метод для явного освобождения ресурсов, если он требуется
         del self.nlp
         torch.cuda.empty_cache()
-
-        return resolved_texts
+        gc.collect()
 
 def preprocess_documents(dataset, input_csv, output_csv, batch_size=32):
     print(f"Загрузка данных {dataset}...")
@@ -100,5 +99,4 @@ def preprocess_documents(dataset, input_csv, output_csv, batch_size=32):
     df.to_csv(output_csv, index=False)
 
     print("Очистка памяти...")
-    del processor
-    gc.collect()
+    processor.cleanup()
