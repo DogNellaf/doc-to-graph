@@ -65,7 +65,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--operation',
         type=str,
-        default='document_graph_conversion',
+        default='document_preprocessing',
         choices=[
             'file_renaming',
             'indexation',

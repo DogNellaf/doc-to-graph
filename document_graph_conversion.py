@@ -159,7 +159,7 @@ class DocumentProcessor:
                 doc_graph = {str(document_index): merged_graph}
                 save_graphs(doc_graph, graphs_dataset_file_name, mode='documents')
 
-        print(f"Document {document_index} processed.")
+        # print(f"Document {document_index} processed.")
         return document_index
 
 def convert_documents(dataset, preprocessed_documents_csv_file_name, preprocessed_sentences_csv_file_name, graphs_dataset_file_name, mode):
