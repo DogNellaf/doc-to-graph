@@ -57,7 +57,7 @@ def adaptive_preprocessing(text):
     return text
 
 # Определяем Ray-актора с параметром max_calls=1, чтобы после каждого вызова актор завершался и освобождал память
-@ray.remote(num_gpus=0.1, max_calls=1)
+@ray.remote(num_gpus=0.5)
 class SpacyWorker:
     def __init__(self):
         # Загружаем spaCy модель и настраиваем fastcoref
