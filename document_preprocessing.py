@@ -10,13 +10,27 @@ from tqdm import tqdm
 import ray
 import gc  # для явного вызова сборщика мусора
 
+# Компилируем регулярные выражения один раз для всего модуля
+RE_DATE = re.compile(r"\d{1,2}/\d{1,2}/\d{2,4}")
+RE_NUMBER = re.compile(r"\b\d+(\.\d+)?\b")
+RE_QUOTE = re.compile(r"\[quote.*?\].*?\[/quote\]", flags=re.DOTALL)
+RE_USER = re.compile(r"\b(USER|MODERATOR|ADMIN)\b:")
+RE_DOSAGE = re.compile(r"(\d+mg|\d+ml|\d+g)")
+RE_MEASUREMENT = re.compile(r"(\d+ ?(tbsp|tsp|cup|g|kg|ml|l))")
+
 # Функции препроцессинга
-def correct_spelling(text, sym_spell):
+def correct_spelling(text, sym_spell, spell_cache):
     words = text.split()
-    corrected_words = [
-        sym_spell.lookup(word, verbosity=0)[0].term if sym_spell.lookup(word, verbosity=0) else word
-        for word in words
-    ]
+    corrected_words = []
+    for word in words:
+        if word in spell_cache:
+            corrected_words.append(spell_cache[word])
+        else:
+            # Ищем исправление слова
+            lookup = sym_spell.lookup(word, verbosity=0)
+            corrected = lookup[0].term if lookup else word
+            spell_cache[word] = corrected
+            corrected_words.append(corrected)
     return " ".join(corrected_words)
 
 def restore_punctuation(text, nlp):
@@ -26,7 +40,7 @@ def restore_punctuation(text, nlp):
 def replace_number(match):
     num = match.group(0)
     try:
-        if re.match(r"\d{1,2}/\d{1,2}/\d{2,4}", num):
+        if RE_DATE.match(num):
             parsed_date = parser.parse(num)
             return parsed_date.strftime("%B %d, %Y") if parsed_date else num
         return num2words(int(num))
@@ -34,13 +48,13 @@ def replace_number(match):
         return num
 
 def process_numbers(text):
-    return re.sub(r"\b\d+(\.\d+)?\b", replace_number, text)
+    return RE_NUMBER.sub(replace_number, text)
 
 def adaptive_preprocessing(text):
-    text = re.sub(r"\[quote.*?\].*?\[/quote\]", "", text, flags=re.DOTALL)
-    text = re.sub(r"\b(USER|MODERATOR|ADMIN)\b:", "", text)
-    text = re.sub(r"(\d+mg|\d+ml|\d+g)", lambda m: f"{m.group(0)} (dosage)", text)
-    text = re.sub(r"(\d+ ?(tbsp|tsp|cup|g|kg|ml|l))", lambda m: f"{m.group(0)} (measurement)", text)
+    text = RE_QUOTE.sub("", text)
+    text = RE_USER.sub("", text)
+    text = RE_DOSAGE.sub(lambda m: f"{m.group(0)} (dosage)", text)
+    text = RE_MEASUREMENT.sub(lambda m: f"{m.group(0)} (measurement)", text)
     return text
 
 # Определяем Ray-актора для обработки документов
@@ -49,19 +63,21 @@ class SpacyWorker:
     def __init__(self):
         # Загружаем spaCy модель и настраиваем fastcoref
         self.nlp = spacy.load("en_core_web_sm")
-        # При необходимости, переключите fastcoref на CPU для экономии GPU-памяти:
-        self.nlp.add_pipe('fastcoref', config={'device': 'cpu'})  # или 'cuda', если память позволяет
+        # Переключаем fastcoref на CPU для экономии GPU-памяти:
+        self.nlp.add_pipe('fastcoref', config={'device': 'cpu'})
         # Загружаем словарь для коррекции орфографии
         self.sym_spell = SymSpell(max_dictionary_edit_distance=2)
         self.sym_spell.load_dictionary("frequency_dictionary_en.txt", term_index=0, count_index=1)
-    
+        # Кэш для исправления орфографии
+        self.spell_cache = {}
+
     def process(self, docs, batch_size=32):
         results = []
         preprocessed_docs = []
         # Предварительная обработка каждого документа
         for doc in docs:
             doc = restore_punctuation(doc, self.nlp)
-            doc = correct_spelling(doc, self.sym_spell)
+            doc = correct_spelling(doc, self.sym_spell, self.spell_cache)
             doc = process_numbers(doc)
             doc = adaptive_preprocessing(doc)
             preprocessed_docs.append(doc)
@@ -73,32 +89,29 @@ class SpacyWorker:
         )
         for doc in docs_processed:
             results.append(doc._.resolved_text)
-        # Явное освобождение памяти (если требуется)
-        gc.collect()
+        gc.collect()  # Явное освобождение памяти
         return results
 
-def preprocess_documents(dataset, raw_documents_csv_file_name, preprocessed_documents_csv_file_name, num_workers=1, chunk_size=50):
+def preprocess_documents(dataset, raw_documents_csv_file_name, preprocessed_documents_csv_file_name,
+                         num_workers=4, chunk_size=50, batch_size=32):
     print(f"Preprocessing documents for the {dataset} dataset...")
     df = pd.read_csv(raw_documents_csv_file_name)
     docs = df['document'].tolist()
     
-    # Разбиваем документы на чанки для распределения по акторам
+    # Разбиваем документы на чанки для распределения по актёрам
     chunks = [docs[i:i+chunk_size] for i in range(0, len(docs), chunk_size)]
     
-    # Используем меньшее число акторов для экономии памяти
+    # Инициализируем Ray и создаём требуемое число акторов
     workers = [SpacyWorker.remote() for _ in range(num_workers)]
     
     futures = []
     for i, chunk in enumerate(chunks):
         worker = workers[i % num_workers]
-        futures.append(worker.process.remote(chunk))
+        futures.append(worker.process.remote(chunk, batch_size))
     
     results = []
-    # Единый прогресс-бар по всем чанкам
     for future in tqdm(ray.get(futures), total=len(futures), desc="Processing documents"):
         results.extend(future)
     
-    # Обновляем DataFrame и сохраняем результаты
     df['document'] = results
     df.to_csv(preprocessed_documents_csv_file_name, index=False)
-    
