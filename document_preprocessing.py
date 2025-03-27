@@ -26,7 +26,6 @@ def correct_spelling(text, sym_spell, spell_cache):
         if word in spell_cache:
             corrected_words.append(spell_cache[word])
         else:
-            # Ищем исправление слова
             lookup = sym_spell.lookup(word, verbosity=0)
             corrected = lookup[0].term if lookup else word
             spell_cache[word] = corrected
@@ -57,13 +56,13 @@ def adaptive_preprocessing(text):
     text = RE_MEASUREMENT.sub(lambda m: f"{m.group(0)} (measurement)", text)
     return text
 
-# Определяем Ray-актора для обработки документов
-@ray.remote(num_gpus=0.1)  # Настройте выделение GPU по необходимости
+# Определяем Ray-актора с параметром max_calls=1, чтобы после каждого вызова актор завершался и освобождал память
+@ray.remote(num_gpus=0.1, max_calls=1)
 class SpacyWorker:
     def __init__(self):
         # Загружаем spaCy модель и настраиваем fastcoref
         self.nlp = spacy.load("en_core_web_sm")
-        # Переключаем fastcoref на CPU для экономии GPU-памяти:
+        # Переключаем fastcoref на CPU для экономии GPU-памяти
         self.nlp.add_pipe('fastcoref', config={'device': 'cpu'})
         # Загружаем словарь для коррекции орфографии
         self.sym_spell = SymSpell(max_dictionary_edit_distance=2)
@@ -89,11 +88,13 @@ class SpacyWorker:
         )
         for doc in docs_processed:
             results.append(doc._.resolved_text)
-        gc.collect()  # Явное освобождение памяти
+        # Очищаем кэш и вызываем сборку мусора
+        self.spell_cache.clear()
+        gc.collect()
         return results
 
 def preprocess_documents(dataset, raw_documents_csv_file_name, preprocessed_documents_csv_file_name,
-                         num_workers=4, chunk_size=50, batch_size=32):
+                         num_workers=2, chunk_size=25, batch_size=32):
     print(f"Preprocessing documents for the {dataset} dataset...")
     df = pd.read_csv(raw_documents_csv_file_name)
     docs = df['document'].tolist()
@@ -101,10 +102,11 @@ def preprocess_documents(dataset, raw_documents_csv_file_name, preprocessed_docu
     # Разбиваем документы на чанки для распределения по актёрам
     chunks = [docs[i:i+chunk_size] for i in range(0, len(docs), chunk_size)]
     
-    # Инициализируем Ray и создаём требуемое число акторов
     workers = [SpacyWorker.remote() for _ in range(num_workers)]
     
     futures = []
+    # Распределяем чанки по акторам; max_calls=1 гарантирует, что после каждого чанка актор завершится,
+    # что помогает избежать накопления памяти.
     for i, chunk in enumerate(chunks):
         worker = workers[i % num_workers]
         futures.append(worker.process.remote(chunk, batch_size))
