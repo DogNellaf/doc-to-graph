@@ -101,7 +101,7 @@ def modify_graph(graph):
         print("Modified graph isn't connected. Problematic.")
         return 0
 
-@ray.remote
+@ray.remote(num_gpus=0.5)
 class DocumentProcessor:
     def __init__(self):
         amrlib.setup_spacy_extension()
